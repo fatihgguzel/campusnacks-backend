@@ -1,0 +1,30 @@
+import * as joi from 'joi';
+import * as genericJoi from './joiGeneric';
+import { Errors } from '../../types/Errors';
+
+const defaultResponse = {
+  data: genericJoi.objNullable(),
+  message: joi
+    .string()
+    .valid('', ...Object.values(Errors))
+    .label('string | Errors'),
+  code: genericJoi.num,
+};
+
+export const defaultResponseSchema = genericJoi
+  .obj({
+    ...defaultResponse,
+  })
+  .label('defaultResponseSchema');
+
+// RESPONSES
+
+export const postLoginResponse = genericJoi
+  .obj({
+    ...defaultResponse,
+    data: genericJoi.obj({
+      authToken: genericJoi.stringTrimmed,
+    }),
+  })
+  .required()
+  .label('postLoginResponse');

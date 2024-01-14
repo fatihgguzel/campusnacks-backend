@@ -1,0 +1,8 @@
+node_modules/
+dist/
+package*
+.*
+README.md
+tsconfig.json
+src/types/joi2ts
+*.sh
