@@ -1,13 +1,10 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
+import BaseModel from './BaseModel';
 
-class ShortCode extends Model {
+class ShortCode extends BaseModel {
   public id!: number;
   public value!: string;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-  public readonly deletedAt!: Date | null;
 }
 
 ShortCode.init(

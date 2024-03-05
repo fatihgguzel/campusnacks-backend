@@ -1,9 +1,10 @@
-import { Association, BelongsToGetAssociationMixin, DataTypes, Model } from 'sequelize';
+import { Association, BelongsToGetAssociationMixin, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 import { CustomerRoleTypes } from '../../types/enums';
 import ShortCode from './ShortCode';
+import BaseModel from './BaseModel';
 
-class Customer extends Model {
+class Customer extends BaseModel {
   public id!: number;
   public email!: string;
   public fullName!: string;
@@ -18,10 +19,6 @@ class Customer extends Model {
 
   public readonly verificationShortCode?: ShortCode | null;
   public getVerificationShortCode!: BelongsToGetAssociationMixin<ShortCode>;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-  public readonly deletedAt!: Date | null;
 
   public static associations: {
     verificationShortCode: Association<Customer, ShortCode>;

@@ -1,18 +1,15 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 import { AuditLogTypes } from '../../types/enums';
+import BaseModel from './BaseModel';
 
-class AuditLog extends Model {
+class AuditLog extends BaseModel {
   public id!: number;
   public logType!: string;
   public service!: string;
   public function!: string;
   public message!: string;
   public data!: object;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-  public readonly deletedAt!: Date | null;
 }
 
 AuditLog.init(
