@@ -7,7 +7,7 @@ import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import { SwaggerTheme } from 'swagger-themes';
 import requestIp from 'request-ip';
-import basicAuth from 'express-basic-auth';
+// import basicAuth from 'express-basic-auth';
 
 import sequelize from './database/sequelize';
 import './database/models/Relations';
@@ -16,6 +16,7 @@ import { response, error } from './helpers';
 import { swaggerDoc } from './swagger.def';
 import {} from './routes';
 // import { requireJwt } from './middlewares/requireAuth';
+import { authRoute } from './routes';
 
 sequelize
   .authenticate()
@@ -44,10 +45,10 @@ const swaggerOptions = {
 
 app.use(
   '/api-docs',
-  basicAuth({
-    users: { admin: 'Y2%2=C&D<e7£' },
-    challenge: true,
-  }),
+  // basicAuth({
+  //   users: { admin: 'Y2%2=C&D<e7£' },
+  //   challenge: true,
+  // }),
   swaggerUi.serve,
   swaggerUi.setup(swaggerDoc, swaggerOptions),
 );
@@ -62,7 +63,7 @@ app.get('/api', (req: Request, res: Response) => {
   }
 });
 
-// TODO app.use('/api/auth', authRoute);
+app.use('/api/auth', authRoute);
 
 app.all('*', (req: Request, res: Response) => {
   response(res, {

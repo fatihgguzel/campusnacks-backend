@@ -1,3 +1,5 @@
+import { swAuthRouter } from './routes/authRoute';
+
 const swaggerDoc = {
   openapi: '3.0.0',
   info: {
@@ -5,7 +7,9 @@ const swaggerDoc = {
     version: `1.0.0`,
     description: 'Documentation with Joi type validation for the API',
   },
-  paths: {},
+  paths: {
+    ...swAuthRouter,
+  },
   components: {
     securitySchemes: {
       // To use it, add 'security: [{ bearerAuth: [] }]' to paths

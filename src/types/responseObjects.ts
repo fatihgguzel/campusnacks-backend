@@ -14,3 +14,11 @@ export interface postLoginResponse {
   message: string | Errors;
   code: number;
 }
+
+export interface postRegisterResponse {
+  data: {
+    authToken: string;
+  };
+  message: string | Errors;
+  code: number;
+}

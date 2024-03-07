@@ -28,3 +28,13 @@ export const postLoginResponse = genericJoi
   })
   .required()
   .label('postLoginResponse');
+
+export const postRegisterResponse = genericJoi
+  .obj({
+    ...defaultResponse,
+    data: genericJoi.obj({
+      authToken: genericJoi.stringTrimmed,
+    }),
+  })
+  .required()
+  .label('postRegisterResponse');
