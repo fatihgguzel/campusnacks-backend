@@ -1,6 +1,6 @@
 import { Association, BelongsToGetAssociationMixin, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
-import { CustomerRoleTypes } from '../../types/enums';
+import * as Enums from '../../types/enums';
 import ShortCode from './ShortCode';
 import BaseModel from './BaseModel';
 
@@ -9,10 +9,11 @@ class Customer extends BaseModel {
   public email!: string;
   public fullName!: string;
   public addressId!: number;
-  public verificationShortCodeId!: number | null;
-  public verificationDate!: Date | null;
+  public verificationShortCodeId!: number | null; // TODO change this into email verification
+  public verificationDate!: Date | null; // TODO change this into email verification
   public phoneNumber!: string;
   public role!: string;
+  public provider!: string;
   public hashPassword!: string | null; //TODO implement googleAuth
   public studentshipExpiresAt!: Date | null; //TODO cron job to change role after expiration
   public jwtSecureCode!: string;
@@ -67,8 +68,13 @@ Customer.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM(...Object.values(CustomerRoleTypes)),
-      defaultValue: CustomerRoleTypes.DEFAULT,
+      type: DataTypes.ENUM(...Object.values(Enums.CustomerRoleTypes)),
+      defaultValue: Enums.CustomerRoleTypes.DEFAULT,
+      allowNull: false,
+    },
+    provider: {
+      type: DataTypes.ENUM(...Object.values(Enums.CustomerProviders)),
+      defaultValue: Enums.CustomerProviders.CAMPUSNACKS,
       allowNull: false,
     },
     hashPassword: {

@@ -1,6 +1,6 @@
 'use strict';
 
-const { CustomerRoleTypes } = require('../../../dist/types/enums');
+const { CustomerRoleTypes, CustomerProviders } = require('../../../dist/types/enums');
 
 module.exports = {
   up: async (queryInterface, { DataTypes, UUIDV4 }) => {
@@ -45,6 +45,11 @@ module.exports = {
         defaultValue: CustomerRoleTypes.DEFAULT,
         allowNull: false,
       },
+      provider: {
+        type: DataTypes.ENUM(...Object.values(CustomerProviders)),
+        defaultValue: CustomerProviders.CAMPUSNACKS,
+        allowNull: false,
+      },
       hashPassword: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -56,6 +61,7 @@ module.exports = {
       },
       jwtSecureCode: {
         type: DataTypes.STRING,
+        defaultValue: UUIDV4,
         allowNull: false,
       },
       createdAt: {
