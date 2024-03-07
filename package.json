@@ -13,6 +13,8 @@
     "joi2ts": "ts-node joi2ts.ts",
     "db:migrate": "sequelize-cli db:migrate",
     "db:reset": "npm run build && sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate",
+    "db:seed":"sequelize db:seed:all",
+    "db:seed:undo":"sequelize db:seed:undo:all",
     "lint": "eslint --fix . && prettier --write ."
   },
   "author": "Fatih Güzel",
