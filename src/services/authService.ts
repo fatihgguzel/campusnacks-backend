@@ -56,3 +56,32 @@ export async function registerCustomer(options: IRegisterCustomerOptions) {
     customer,
   };
 }
+
+interface ILoginCustomerOptions {
+  email: string;
+  password: string;
+}
+export async function loginCustomer(options: ILoginCustomerOptions) {
+  const customer = await Customer.findOne({ where: { email: options.email } });
+
+  if (!customer) {
+    throw new AppError(Errors.INVALID_CREDENTIALS, 400);
+  }
+
+  if (customer.provider !== Enums.CustomerProviders.CAMPUSNACKS) {
+    throw new AppError(Errors.USE_GOOGLE_LOGIN, 400);
+  }
+
+  const isPasswordMatch = await bcrypt.compare(options.password, customer.hashPassword!);
+
+  if (!isPasswordMatch) {
+    throw new AppError(Errors.INVALID_CREDENTIALS, 400);
+  }
+
+  const authToken = Helpers.jwtGenerator({
+    id: customer.id,
+    jwtSecureCode: bcrypt.hashSync(customer.jwtSecureCode, bcrypt.genSaltSync(10)),
+  });
+
+  return { authToken };
+}
