@@ -65,7 +65,7 @@ export async function loginCustomer(options: ILoginCustomerOptions) {
   const customer = await Customer.findOne({ where: { email: options.email } });
 
   if (!customer) {
-    throw new AppError(Errors.INVALID_CREDENTIALS);
+    throw new AppError(Errors.INVALID_CREDENTIALS, 400);
   }
 
   if (customer.provider !== Enums.CustomerProviders.CAMPUSNACKS) {
@@ -75,7 +75,7 @@ export async function loginCustomer(options: ILoginCustomerOptions) {
   const isPasswordMatch = await bcrypt.compare(options.password, customer.hashPassword!);
 
   if (!isPasswordMatch) {
-    throw new AppError(Errors.INVALID_CREDENTIALS);
+    throw new AppError(Errors.INVALID_CREDENTIALS, 400);
   }
 
   const authToken = Helpers.jwtGenerator({
