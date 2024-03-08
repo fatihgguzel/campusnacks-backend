@@ -62,28 +62,26 @@ interface ILoginCustomerOptions {
   password: string;
 }
 export async function loginCustomer(options: ILoginCustomerOptions) {
-  const { email, password } = options;
-
-  const customer = await Customer.findOne({ where: { email } });
+  const customer = await Customer.findOne({ where: { email: options.email } });
 
   if (!customer) {
     throw new AppError(Errors.INVALID_CREDENTIALS);
   }
 
-  if (customer.provider === Enums.CustomerProviders.CAMPUSNACKS) {
-    const isPasswordMatch = await bcrypt.compare(password, customer.hashPassword as string);
-
-    if (isPasswordMatch) {
-      const authToken = Helpers.jwtGenerator({
-        id: customer.id,
-        jwtSecureCode: bcrypt.hashSync(customer.jwtSecureCode, bcrypt.genSaltSync(10)),
-      });
-
-      return { authToken };
-    } else {
-      throw new AppError(Errors.INVALID_CREDENTIALS);
-    }
-  } else {
-    throw new AppError(Errors.USE_GOOGLE_LOGIN);
+  if (customer.provider !== Enums.CustomerProviders.CAMPUSNACKS) {
+    throw new AppError(Errors.USE_GOOGLE_LOGIN, 400);
   }
+
+  const isPasswordMatch = await bcrypt.compare(options.password, customer.hashPassword!);
+
+  if (!isPasswordMatch) {
+    throw new AppError(Errors.INVALID_CREDENTIALS);
+  }
+
+  const authToken = Helpers.jwtGenerator({
+    id: customer.id,
+    jwtSecureCode: bcrypt.hashSync(customer.jwtSecureCode, bcrypt.genSaltSync(10)),
+  });
+
+  return { authToken };
 }
