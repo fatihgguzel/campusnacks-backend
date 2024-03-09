@@ -1,8 +1,7 @@
-import { Association, BelongsToGetAssociationMixin, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import BaseModel from './BaseModel';
 import sequelize from '../sequelize';
 import { DayOfWeek } from '../../types/enums';
-import Restaurant from './Restaurant';
 
 class BusinessHour extends BaseModel {
   public id!: number;
@@ -10,13 +9,6 @@ class BusinessHour extends BaseModel {
   public openingTime!: Date; // todo date can be changed
   public closingTime!: Date;
   public restaurantId!: number;
-
-  public readonly restaurant!: Restaurant;
-  public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
-
-  public static associations: {
-    restaurant: Association<BusinessHour, Restaurant>;
-  };
 }
 
 BusinessHour.init(
@@ -38,13 +30,6 @@ BusinessHour.init(
     },
     closingTime: {
       type: DataTypes.TIME,
-      allowNull: false,
-    },
-    restaurantId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Restaurant,
-      },
       allowNull: false,
     },
   },

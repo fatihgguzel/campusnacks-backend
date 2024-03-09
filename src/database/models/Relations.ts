@@ -16,11 +16,6 @@ Restaurant.belongsTo(Address, {
   foreignKey: 'addressId',
 });
 
-BusinessHour.belongsToMany(Restaurant, {
-  through: 'restaurant',
-  foreignKey: 'restaurantId',
-});
-
 Restaurant.hasMany(BusinessHour, {
   as: 'businessHours',
   foreignKey: 'restaurantId',

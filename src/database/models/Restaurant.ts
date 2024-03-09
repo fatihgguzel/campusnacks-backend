@@ -10,7 +10,7 @@ class Restaurant extends BaseModel {
   public phone!: string;
   public email!: string;
   public addressId!: number;
-  public imageUrl!: number | null;
+  public imageUrl!: string | null;
   public hasDelivery!: boolean;
   public deliveryPrice!: number | null;
   public minimumPrice!: number;
@@ -58,7 +58,7 @@ Restaurant.init(
       allowNull: false,
     },
     imageUrl: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     hasDelivery: {
