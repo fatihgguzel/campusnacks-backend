@@ -5,10 +5,10 @@ module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert('Restaurants', [
       {
-        id: 1,
         name: 'Mavis',
         phone: '05050913285',
         email: 'mavis@gmail.com',
+        addressId: 1,
         imageUrl: null,
         hasDelivery: false,
         deliveryPrice: null,
@@ -19,10 +19,10 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 2,
         name: 'loremipsum',
         phone: 'loremipsum',
         email: 'loremipsum@gmail.com',
+        addressId: 2,
         imageUrl: null,
         hasDelivery: true,
         deliveryPrice: null,

@@ -5,7 +5,6 @@ module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert('Addresses', [
       {
-        id: 1,
         city: 'Izmir',
         district: 'Urla',
         address: 'mavis arkasi',
@@ -13,7 +12,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 2,
         city: 'Izmir',
         district: 'Balcova',
         address: 'lorem ipsum',
