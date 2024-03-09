@@ -23,8 +23,13 @@ module.exports = {
         unique: true,
         allowNull: false,
       },
-      imageUrl: {
+      addressId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: 'Addresses', key: 'id' },
+      },
+      imageUrl: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
       hasDelivery: {
