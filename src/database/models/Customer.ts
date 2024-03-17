@@ -3,6 +3,7 @@ import sequelize from '../sequelize';
 import * as Enums from '../../types/enums';
 import ShortCode from './ShortCode';
 import BaseModel from './BaseModel';
+import Address from './Address';
 
 class Customer extends BaseModel {
   public id!: number;
@@ -46,7 +47,9 @@ Customer.init(
     },
     addressId: {
       type: DataTypes.INTEGER,
-      // TODO references: {}
+      references: {
+        model: Address,
+      },
       defaultValue: null,
       allowNull: true,
     },

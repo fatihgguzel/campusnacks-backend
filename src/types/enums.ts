@@ -12,3 +12,9 @@ export enum CustomerRoleTypes {
   DEFAULT = '0',
   STUDENT = '1',
 }
+
+export enum PasswordResetRequestStates {
+  PENDING = '0',
+  COMPLETED = '1',
+  EXPIRED = '2',
+}

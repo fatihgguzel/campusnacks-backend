@@ -105,4 +105,50 @@ router.post('/login', validate({ body: RequestObjects.postLoginBody }), async (r
   }
 });
 
+router.post(
+  '/forgot-password',
+  validate({ body: RequestObjects.postForgotPasswordBody }),
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body as RequestObjectsTypes.postForgotPasswordBody;
+
+      const { shortCode, expireDate } = await AuthService.forgotPassword({
+        email: body.email,
+      });
+
+      //TODO send email to customer with shortcode
+
+      Helpers.response(res, {
+        data: {
+          shortCode,
+          expireDate,
+        },
+        message: 'Password reset email is sent successfully',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.post(
+  '/reset-password',
+  validate({ body: RequestObjects.postResetPasswordBody }),
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body as RequestObjectsTypes.postResetPasswordBody;
+
+      await AuthService.resetPassword({
+        email: body.email,
+        shortCode: body.shortCode,
+        password: body.password,
+      });
+
+      Helpers.response(res, { message: 'Password updated sucessfully' });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
 export default router;

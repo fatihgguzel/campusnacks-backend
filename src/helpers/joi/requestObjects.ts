@@ -20,3 +20,19 @@ export const postRegisterBody = genericJoi
   })
   .required()
   .label('postRegisterBody');
+
+export const postForgotPasswordBody = genericJoi
+  .obj({
+    email: genericJoi.email.required(),
+  })
+  .required()
+  .label('postForgotPasswordBody');
+
+export const postResetPasswordBody = genericJoi
+  .obj({
+    email: genericJoi.email.required(),
+    shortCode: genericJoi.stringTrimmed.required(),
+    password: genericJoi.password.required(),
+  })
+  .required()
+  .label('postResetPasswordBody');
