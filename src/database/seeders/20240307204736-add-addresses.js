@@ -18,6 +18,20 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        city: 'Izmir',
+        district: 'address1',
+        address: 'lorem ipsum',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        city: 'Izmir',
+        district: 'address2s',
+        address: 'lorem ipsum',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 
