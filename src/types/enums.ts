@@ -22,3 +22,28 @@ export enum DayOfWeek {
   SATURDAY = '5',
   SUNDAY = '6',
 }
+
+export enum CuisineTypes {
+  DEFAULT = '0',
+  //todo: fill here
+}
+
+export enum ProductTypes {
+  DEFAULT = '0',
+  //todo: fill here
+}
+
+export enum OrderStatusTypes {
+  DEFAULT = '0',
+  //todo: fill here
+}
+
+export enum DeliveryTypes {
+  DEFAULT = '0',
+  //todo: fill here
+}
+
+export enum OptionsTypes {
+  DEFAULT = '0',
+  //todo: fill here
+}
