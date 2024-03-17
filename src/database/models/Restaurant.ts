@@ -1,8 +1,11 @@
 import { Association, BelongsToGetAssociationMixin, BelongsToManyGetAssociationsMixin, DataTypes } from 'sequelize';
-import BaseModel from './BaseModel';
 import sequelize from '../sequelize';
-import BusinessHour from './BusinessHour';
 import Address from './Address';
+import BaseModel from './BaseModel';
+import BusinessHour from './BusinessHour';
+import Item from './Item';
+import Order from './Order';
+import OrderLog from './OrderLog';
 
 class Restaurant extends BaseModel {
   public id!: number;
@@ -20,12 +23,24 @@ class Restaurant extends BaseModel {
   public readonly businessHours!: [BusinessHour];
   public getBusinessHours!: BelongsToManyGetAssociationsMixin<BusinessHour>;
 
+  public readonly items!: [Item];
+  public getItems!: BelongsToManyGetAssociationsMixin<Item>;
+
   public readonly address!: Address;
   public getAddress!: BelongsToGetAssociationMixin<Address>;
+
+  public readonly orders!: [Order];
+  public getOrders!: BelongsToManyGetAssociationsMixin<Order>;
+
+  public readonly orderLogs!: [OrderLog];
+  public getOrderLogs!: BelongsToManyGetAssociationsMixin<OrderLog>;
 
   public static associations: {
     address: Association<Restaurant, Address>;
     businessHours: Association<Restaurant, BusinessHour>;
+    items: Association<Restaurant, Item>;
+    orders: Association<Restaurant, Order>;
+    orderLogs: Association<Restaurant, OrderLog>;
   };
 }
 

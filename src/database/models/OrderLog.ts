@@ -1,25 +1,28 @@
 import { BelongsToGetAssociationMixin, DataTypes, Association } from 'sequelize';
 import sequelize from '../sequelize';
-import * as Enums from '../../types/enums';
 import BaseModel from './BaseModel';
 import Restaurant from './Restaurant';
+import Order from './Order';
 
-class BusinessHour extends BaseModel {
+class OrderLog extends BaseModel {
   public id!: number;
-  public dayOfWeek!: string;
-  public openingTime!: Date; // todo date can be changed
-  public closingTime!: Date;
+  public csComission!: number; // todo make it enum
+  public orderId!: number;
   public restaurantId!: number;
+
+  public readonly order!: Order;
+  public getOrder!: BelongsToGetAssociationMixin<Order>;
 
   public readonly restaurant!: Restaurant;
   public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
 
   public static associations: {
-    restaurant: Association<BusinessHour, Restaurant>;
+    order: Association<OrderLog, Order>;
+    restaurant: Association<OrderLog, Restaurant>;
   };
 }
 
-BusinessHour.init(
+OrderLog.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -28,17 +31,15 @@ BusinessHour.init(
       autoIncrement: true,
       allowNull: false,
     },
-    dayOfWeek: {
-      type: DataTypes.ENUM(...Object.values(Enums.DayOfWeek)),
-      allowNull: false,
-      defaultValue: Enums.DayOfWeek.MONDAY,
-    },
-    openingTime: {
-      type: DataTypes.TIME,
+    csComission: {
+      type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    closingTime: {
-      type: DataTypes.TIME,
+    orderId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Order,
+      },
       allowNull: false,
     },
     restaurantId: {
@@ -56,4 +57,4 @@ BusinessHour.init(
   },
 );
 
-export default BusinessHour;
+export default OrderLog;

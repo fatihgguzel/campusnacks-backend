@@ -1,7 +1,8 @@
 import { DataTypes } from 'sequelize';
-import BaseModel from './BaseModel';
 import sequelize from '../sequelize';
+import BaseModel from './BaseModel';
 
+//todo: divide into two part Customer-address, Restaurant-address
 class Address extends BaseModel {
   public id!: number;
   public city!: string;
