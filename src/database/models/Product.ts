@@ -12,7 +12,7 @@ class Product extends BaseModel {
   public readonly item!: Item;
   public getItem!: BelongsToGetAssociationMixin<Item>;
 
-  public readonly menuProducts!: [MenuProduct];
+  public readonly menuProducts!: MenuProduct[];
   public getMenuProducts!: BelongsToManyGetAssociationsMixin<MenuProduct>;
 
   public static associations: {

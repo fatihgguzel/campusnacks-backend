@@ -34,7 +34,7 @@ class Item extends BaseModel {
   public readonly menu!: Menu;
   public getMenu!: BelongsToGetAssociationMixin<Menu>;
 
-  public readonly orderItems!: [OrderItem];
+  public readonly orderItems!: OrderItem[];
   public getOrderItems!: BelongsToManyGetAssociationsMixin<OrderItem>;
 
   public readonly option!: Option | null;

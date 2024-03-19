@@ -7,7 +7,7 @@ import Restaurant from './Restaurant';
 class BusinessHour extends BaseModel {
   public id!: number;
   public dayOfWeek!: string;
-  public openingTime!: Date; // todo date can be changed
+  public openingTime!: Date;
   public closingTime!: Date;
   public restaurantId!: number;
 

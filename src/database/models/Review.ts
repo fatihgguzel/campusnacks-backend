@@ -7,7 +7,7 @@ class Review extends BaseModel {
   public id!: number;
   public orderId!: number;
   public comment!: string;
-  public star!: number;
+  public star!: number; //todo make it enum type
   public date!: Date;
 
   public readonly order!: Order;

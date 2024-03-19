@@ -20,19 +20,19 @@ class Restaurant extends BaseModel {
   public deliveryTime!: number;
   public isBusy!: boolean;
 
-  public readonly businessHours!: [BusinessHour];
+  public readonly businessHours!: BusinessHour[];
   public getBusinessHours!: BelongsToManyGetAssociationsMixin<BusinessHour>;
 
-  public readonly items!: [Item];
+  public readonly items!: Item[];
   public getItems!: BelongsToManyGetAssociationsMixin<Item>;
 
   public readonly address!: Address;
   public getAddress!: BelongsToGetAssociationMixin<Address>;
 
-  public readonly orders!: [Order];
+  public readonly orders!: Order[];
   public getOrders!: BelongsToManyGetAssociationsMixin<Order>;
 
-  public readonly orderLogs!: [OrderLog];
+  public readonly orderLogs!: OrderLog[];
   public getOrderLogs!: BelongsToManyGetAssociationsMixin<OrderLog>;
 
   public static associations: {

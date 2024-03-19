@@ -26,7 +26,7 @@ class Customer extends BaseModel {
   public readonly verificationShortCode?: ShortCode | null;
   public getVerificationShortCode!: BelongsToGetAssociationMixin<ShortCode>;
 
-  public readonly orders!: [Order];
+  public readonly orders!: Order[];
   public getOrders!: BelongsToManyGetAssociationsMixin<Order>;
 
   public static associations: {
