@@ -25,7 +25,9 @@ export async function createCustomer(options: ICreateCustomerOptions) {
       {
         value: await shortCodeGenerator(),
       },
-      { transaction },
+      {
+        transaction,
+      },
     );
 
     const address = await Address.create(
@@ -34,7 +36,9 @@ export async function createCustomer(options: ICreateCustomerOptions) {
         district: options.district,
         address: options.address,
       },
-      { transaction },
+      {
+        transaction,
+      },
     );
 
     const customer = await Customer.create(
@@ -49,7 +53,9 @@ export async function createCustomer(options: ICreateCustomerOptions) {
         hashPassword: options.password ? bcrypt.hashSync(options.password, bcrypt.genSaltSync(10)) : null,
         jwtSecureCode: options.jwtSecureCode || uuid(),
       },
-      { transaction },
+      {
+        transaction,
+      },
     );
 
     return customer;

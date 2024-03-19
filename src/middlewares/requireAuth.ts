@@ -1,5 +1,7 @@
 import { passport } from '../helpers';
 
-const requireJwt = passport.authenticate('jwtAuth', { session: false });
+const requireJwt = passport.authenticate('jwtAuth', {
+  session: false,
+});
 
 export { requireJwt };

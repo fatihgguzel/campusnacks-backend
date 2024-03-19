@@ -1,6 +1,5 @@
 'use strict';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { OrderStatusTypes, DeliveryTypes } = require('../../../dist/types/enums');
 
 /** @type {import('sequelize-cli').Migration} */

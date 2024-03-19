@@ -58,31 +58,37 @@ export const swAuthRouter = {
   },
 };
 
-router.post('/register', validate({ body: RequestObjects.postRegisterBody }), async (req: Request, res: Response) => {
-  try {
-    const body = req.body as RequestObjectsTypes.postRegisterBody;
+router.post(
+  '/register',
+  validate({
+    body: RequestObjects.postRegisterBody,
+  }),
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body as RequestObjectsTypes.postRegisterBody;
 
-    const { authToken } = await AuthService.registerCustomer({
-      email: body.email,
-      fullName: body.fullName,
-      phoneNumber: body.phoneNumber,
-      role: Enums.CustomerRoleTypes.DEFAULT,
-      provider: Enums.CustomerProviders.CAMPUSNACKS,
-      password: body.password,
-      city: body.city,
-      district: body.district,
-      address: body.address,
-    });
+      const { authToken } = await AuthService.registerCustomer({
+        email: body.email,
+        fullName: body.fullName,
+        phoneNumber: body.phoneNumber,
+        role: Enums.CustomerRoleTypes.DEFAULT,
+        provider: Enums.CustomerProviders.CAMPUSNACKS,
+        password: body.password,
+        city: body.city,
+        district: body.district,
+        address: body.address,
+      });
 
-    Helpers.response(res, {
-      data: {
-        authToken,
-      },
-      message: 'Successfully registered',
-    });
-  } catch (err) {
-    Helpers.error(res, err);
-  }
-});
+      Helpers.response(res, {
+        data: {
+          authToken,
+        },
+        message: 'Successfully registered',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
 
 export default router;
