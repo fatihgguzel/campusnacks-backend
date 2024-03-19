@@ -7,6 +7,12 @@
         "sourceType": "module"
     },
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "object-curly-newline": ["error", {
+            "ObjectExpression":{ "multiline": true,"minProperties": 1 },
+            "ObjectPattern": { "multiline": true,"minProperties": 2},
+            "ImportDeclaration": "never",
+            "ExportDeclaration":  "never"
+        }]
     }
 }
