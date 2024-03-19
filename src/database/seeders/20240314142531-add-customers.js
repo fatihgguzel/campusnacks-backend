@@ -9,7 +9,7 @@ module.exports = {
       {
         email: 'email@mail.com',
         fullName: 'loremipsum',
-        addressId: 3,
+        addressId: 1,
         verificationShortCodeId: null,
         verificationDate: null,
         phoneNumber: 'loremipsum',
@@ -24,7 +24,7 @@ module.exports = {
       {
         email: 'email1@mail.com',
         fullName: 'loremipsum1',
-        addressId: 4,
+        addressId: 2,
         verificationShortCodeId: null,
         verificationDate: null,
         phoneNumber: 'loremipsum',

@@ -1,10 +1,10 @@
 import { Association, BelongsToGetAssociationMixin, BelongsToManyGetAssociationsMixin, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 import * as Enums from '../../types/enums';
-import Address from './Address';
 import BaseModel from './BaseModel';
 import ShortCode from './ShortCode';
 import Order from './Order';
+import CustomerAddress from './CustomerAddress';
 
 class Customer extends BaseModel {
   public id!: number;
@@ -20,8 +20,8 @@ class Customer extends BaseModel {
   public studentshipExpiresAt!: Date | null; //TODO cron job to change role after expiration
   public jwtSecureCode!: string;
 
-  public readonly address!: Address;
-  public getAddress!: BelongsToGetAssociationMixin<Address>;
+  public readonly address!: CustomerAddress;
+  public getAddress!: BelongsToGetAssociationMixin<CustomerAddress>;
 
   public readonly verificationShortCode?: ShortCode | null;
   public getVerificationShortCode!: BelongsToGetAssociationMixin<ShortCode>;
@@ -31,7 +31,7 @@ class Customer extends BaseModel {
 
   public static associations: {
     verificationShortCode: Association<Customer, ShortCode>;
-    address: Association<Customer, Address>;
+    address: Association<Customer, CustomerAddress>;
     orders: Association<Customer, Order>;
   };
 }
@@ -57,7 +57,7 @@ Customer.init(
     addressId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Address,
+        model: CustomerAddress,
       },
       defaultValue: null,
       allowNull: true,

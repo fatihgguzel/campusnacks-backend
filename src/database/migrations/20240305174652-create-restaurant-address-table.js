@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, { DataTypes }) => {
-    await queryInterface.createTable('Addresses', {
+    await queryInterface.createTable('RestaurantAddresses', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -22,6 +22,18 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      nHood: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      street: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      no: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
@@ -37,6 +49,6 @@ module.exports = {
     });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Addresses');
+    await queryInterface.dropTable('RestaurantAddresses');
   },
 };

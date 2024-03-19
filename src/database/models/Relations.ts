@@ -1,4 +1,3 @@
-import Address from './Address';
 import BusinessHour from './BusinessHour';
 import Cuisine from './Cuisine';
 import Customer from './Customer';
@@ -13,6 +12,8 @@ import Restaurant from './Restaurant';
 import Review from './Review';
 import ShortCode from './ShortCode';
 import Option from './Option';
+import CustomerAddress from './CustomerAddress';
+import RestaurantAddress from './RestaurantAddress';
 
 console.log('Loading DB relations');
 
@@ -71,7 +72,7 @@ Customer.belongsTo(ShortCode, {
   foreignKey: 'verificationShortCodeId',
 });
 
-Customer.belongsTo(Address, {
+Customer.belongsTo(CustomerAddress, {
   as: 'address',
   foreignKey: 'addressId',
 });
@@ -81,12 +82,17 @@ Customer.hasMany(Order, {
   foreignKey: 'customerId',
 });
 
+CustomerAddress.hasOne(Customer, {
+  as: 'customer',
+  foreignKey: 'addressId',
+});
+
 ShortCode.hasOne(Customer, {
   as: 'customer',
   foreignKey: 'verificationShortCodeId',
 });
 
-Restaurant.belongsTo(Address, {
+Restaurant.belongsTo(RestaurantAddress, {
   as: 'address',
   foreignKey: 'addressId',
 });
@@ -109,6 +115,11 @@ Restaurant.hasMany(Order, {
 Restaurant.hasMany(OrderLog, {
   as: 'orderLogs',
   foreignKey: 'restaurantId',
+});
+
+RestaurantAddress.hasOne(Restaurant, {
+  as: 'restaurant',
+  foreignKey: 'addressId',
 });
 
 BusinessHour.belongsTo(Restaurant, {

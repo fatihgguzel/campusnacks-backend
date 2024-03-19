@@ -26,7 +26,7 @@ module.exports = {
       addressId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: 'Addresses', key: 'id' },
+        references: { model: 'RestaurantAddresses', key: 'id' },
       },
       imageUrl: {
         type: DataTypes.STRING,

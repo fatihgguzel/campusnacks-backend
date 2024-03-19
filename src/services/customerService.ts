@@ -1,11 +1,11 @@
 import Customer from '../database/models/Customer';
-import Address from '../database/models/Address';
 import bcrypt from 'bcrypt';
 import { shortCodeGenerator } from '../helpers';
 import ShortCode from '../database/models/ShortCode';
 import * as Enums from '../types/enums';
 import { v4 as uuid } from 'uuid';
 import sequelize from '../database/sequelize';
+import CustomerAddress from '../database/models/CustomerAddress';
 
 interface ICreateCustomerOptions {
   email: string;
@@ -30,7 +30,7 @@ export async function createCustomer(options: ICreateCustomerOptions) {
       },
     );
 
-    const address = await Address.create(
+    const address = await CustomerAddress.create(
       {
         city: options.city,
         district: options.district,

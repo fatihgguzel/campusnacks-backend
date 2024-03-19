@@ -1,11 +1,11 @@
 import { Association, BelongsToGetAssociationMixin, BelongsToManyGetAssociationsMixin, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
-import Address from './Address';
 import BaseModel from './BaseModel';
 import BusinessHour from './BusinessHour';
 import Item from './Item';
 import Order from './Order';
 import OrderLog from './OrderLog';
+import RestaurantAddress from './RestaurantAddress';
 
 class Restaurant extends BaseModel {
   public id!: number;
@@ -26,8 +26,8 @@ class Restaurant extends BaseModel {
   public readonly items!: Item[];
   public getItems!: BelongsToManyGetAssociationsMixin<Item>;
 
-  public readonly address!: Address;
-  public getAddress!: BelongsToGetAssociationMixin<Address>;
+  public readonly address!: RestaurantAddress;
+  public getAddress!: BelongsToGetAssociationMixin<RestaurantAddress>;
 
   public readonly orders!: Order[];
   public getOrders!: BelongsToManyGetAssociationsMixin<Order>;
@@ -36,7 +36,7 @@ class Restaurant extends BaseModel {
   public getOrderLogs!: BelongsToManyGetAssociationsMixin<OrderLog>;
 
   public static associations: {
-    address: Association<Restaurant, Address>;
+    address: Association<Restaurant, RestaurantAddress>;
     businessHours: Association<Restaurant, BusinessHour>;
     items: Association<Restaurant, Item>;
     orders: Association<Restaurant, Order>;
@@ -68,7 +68,7 @@ Restaurant.init(
     addressId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Address,
+        model: RestaurantAddress,
       },
       allowNull: false,
     },
