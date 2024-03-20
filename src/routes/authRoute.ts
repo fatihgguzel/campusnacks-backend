@@ -56,6 +56,50 @@ export const swAuthRouter = {
       },
     },
   },
+  '/api/auth/forgot-password': {
+    post: {
+      summary: 'Send password reset link to email',
+      tags: ['Auth'],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: j2s(RequestObjects.postForgotPasswordBody).swagger,
+          },
+        },
+      },
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.postForgotPasswordResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
+  'api/auth/reset-password': {
+    post: {
+      summary: 'Update password of customer',
+      tags: ['Auth'],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: j2s(RequestObjects.postResetPasswordBody).swagger,
+          },
+        },
+      },
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.postResetPasswordResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 router.post('/register', validate({ body: RequestObjects.postRegisterBody }), async (req: Request, res: Response) => {
@@ -112,19 +156,11 @@ router.post(
     try {
       const body = req.body as RequestObjectsTypes.postForgotPasswordBody;
 
-      const { shortCode, expireDate } = await AuthService.forgotPassword({
+      await AuthService.forgotPassword({
         email: body.email,
       });
 
-      //TODO send email to customer with shortcode
-
-      Helpers.response(res, {
-        data: {
-          shortCode,
-          expireDate,
-        },
-        message: 'Password reset email is sent successfully',
-      });
+      Helpers.response(res, { message: 'Password reset email is sent successfully' });
     } catch (err) {
       Helpers.error(res, err);
     }
@@ -141,7 +177,7 @@ router.post(
       await AuthService.resetPassword({
         email: body.email,
         shortCode: body.shortCode,
-        password: body.password,
+        newPassword: body.newPassword,
       });
 
       Helpers.response(res, { message: 'Password updated sucessfully' });

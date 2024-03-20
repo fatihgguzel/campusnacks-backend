@@ -14,10 +14,18 @@ module.exports = {
       },
       customerId: {
         type: DataTypes.INTEGER,
+        references: {
+          model: 'Customers',
+          key: 'id',
+        },
         allowNull: false,
       },
-      shortCodeId: {
+      passwordResetShortCodeId: {
         type: DataTypes.INTEGER,
+        references: {
+          model: 'ShortCodes',
+          key: 'id',
+        },
         unique: true,
         allowNull: false,
       },
@@ -43,8 +51,14 @@ module.exports = {
         type: DataTypes.DATE,
       },
     });
+
+    await queryInterface.addIndex('PasswordResetRequests', ['customerId'], {
+      name: 'passwordresetrequest_customerid',
+    });
   },
   down: async (queryInterface) => {
+    await queryInterface.removeIndex('PasswordResetRequests', 'passwordresetrequest_customerid');
+
     await queryInterface.dropTable('PasswordResetRequests');
   },
 };

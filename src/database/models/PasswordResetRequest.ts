@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { Association, BelongsToGetAssociationMixin, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 import * as Enums from '../../types/enums';
 import ShortCode from './ShortCode';
@@ -8,9 +8,20 @@ import Customer from './Customer';
 class PasswordResetRequest extends BaseModel {
   public id!: number;
   public customerId!: number;
-  public shortCodeId!: number;
+  public passwordResetShortCodeId!: number;
   public state!: string;
   public expireDate!: Date;
+
+  public readonly passwordResetShortCode?: ShortCode | null;
+  public getpasswordResetShortCode!: BelongsToGetAssociationMixin<ShortCode>;
+
+  public readonly customer?: Customer | null;
+  public getCustomer!: BelongsToGetAssociationMixin<Customer>;
+
+  public static associations: {
+    passwordResetShortCode: Association<PasswordResetRequest, ShortCode>;
+    customer: Association<PasswordResetRequest, Customer>;
+  };
 }
 
 PasswordResetRequest.init(
@@ -29,7 +40,7 @@ PasswordResetRequest.init(
       },
       allowNull: false,
     },
-    shortCodeId: {
+    passwordResetShortCodeId: {
       type: DataTypes.INTEGER,
       references: {
         model: ShortCode,
@@ -39,7 +50,7 @@ PasswordResetRequest.init(
     },
     state: {
       type: DataTypes.ENUM(...Object.values(Enums.PasswordResetRequestStates)),
-      defaultValue: Enums.PasswordResetRequestStates.PENDING,
+      allowNull: false,
     },
     expireDate: {
       type: DataTypes.DATE,

@@ -32,7 +32,7 @@ export const postResetPasswordBody = genericJoi
   .obj({
     email: genericJoi.email.required(),
     shortCode: genericJoi.stringTrimmed.required(),
-    password: genericJoi.password.required(),
+    newPassword: genericJoi.password.required(),
   })
   .required()
   .label('postResetPasswordBody');

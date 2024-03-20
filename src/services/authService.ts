@@ -5,7 +5,6 @@ import * as CustomerService from './customerService';
 import * as Helpers from '../helpers';
 import bcrypt from 'bcrypt';
 import * as Enums from '../types/enums';
-import sequelize from '../database/sequelize';
 import ShortCode from '../database/models/ShortCode';
 import PasswordResetRequest from '../database/models/PasswordResetRequest';
 import { shortCodeGenerator } from '../helpers';
@@ -98,75 +97,98 @@ export async function forgotPassword(options: IForgotPasswordOptions) {
   const customer = await Customer.findOne({ where: { email: options.email } });
 
   if (!customer) {
-    throw new AppError(Errors.ACCOUNT_WITH_EMAIL_NOT_FOUND, 400);
+    throw new AppError(Errors.CUSTOMER_NOT_FOUND, 404);
   }
 
-  await PasswordResetRequest.update(
-    { state: Enums.PasswordResetRequestStates.EXPIRED },
-    { where: { customerId: customer.id, state: Enums.PasswordResetRequestStates.PENDING } },
-  );
+  if (customer.provider !== Enums.CustomerProviders.CAMPUSNACKS) {
+    throw new AppError(Errors.INCORRECT_PROVIDER, 400);
+  }
 
-  const passwordResetData = await sequelize.transaction(async (transaction) => {
-    const passwordResetShortCode = await ShortCode.create(
+  let passwordResetRequest: PasswordResetRequest | null = null;
+  let shortCodeValue: string | null = null;
+
+  const existingRequest = await PasswordResetRequest.findOne({
+    where: {
+      customerId: customer.id,
+      state: Enums.PasswordResetRequestStates.PENDING,
+    },
+    include: [
       {
-        value: await shortCodeGenerator(),
+        model: ShortCode,
+        as: 'passwordResetShortCode',
+        required: true,
       },
-      { transaction },
-    );
-
-    const passwordResetRequest = await PasswordResetRequest.create(
-      {
-        customerId: customer.id,
-        shortCodeId: passwordResetShortCode.id,
-        expireDate: moment().add(10, 'minutes'),
-      },
-      { transaction },
-    );
-
-    return { shortCode: passwordResetShortCode.value, expireDate: passwordResetRequest.expireDate };
+    ],
   });
 
-  return passwordResetData;
+  const now = moment();
+
+  if (existingRequest) {
+    if (moment(existingRequest.expireDate).isBefore(now)) {
+      await existingRequest.update({ state: Enums.PasswordResetRequestStates.EXPIRED });
+    } else {
+      passwordResetRequest = existingRequest;
+      shortCodeValue = existingRequest.passwordResetShortCode!.value;
+    }
+  }
+
+  if (!passwordResetRequest) {
+    const passwordResetShortCode = await ShortCode.create({
+      value: await shortCodeGenerator(),
+    });
+
+    shortCodeValue = passwordResetShortCode.value;
+
+    passwordResetRequest = await PasswordResetRequest.create({
+      customerId: customer.id,
+      passwordResetShortCodeId: passwordResetShortCode.id,
+      state: Enums.PasswordResetRequestStates.PENDING,
+      expireDate: moment().add(3, 'hours'),
+    });
+  }
+
+  //TODO send email to customer with shortcode
+  return shortCodeValue;
 }
 
 interface IResetPasswordOptions {
   email: string;
   shortCode: string;
-  password: string;
+  newPassword: string;
 }
 export async function resetPassword(options: IResetPasswordOptions) {
   const customer = await Customer.findOne({ where: { email: options.email } });
 
   if (!customer) {
-    throw new AppError(Errors.ACCOUNT_WITH_EMAIL_NOT_FOUND, 400);
+    throw new AppError(Errors.CUSTOMER_NOT_FOUND, 404);
   }
 
-  const shortCode = await ShortCode.findOne({
-    where: { value: options.shortCode },
+  const existingRequest = await PasswordResetRequest.findOne({
+    where: {
+      customerId: customer.id,
+      state: Enums.PasswordResetRequestStates.PENDING,
+    },
+    include: [
+      {
+        model: ShortCode,
+        as: 'passwordResetShortCode',
+        where: {
+          value: options.shortCode,
+        },
+      },
+    ],
   });
 
-  if (!shortCode) {
-    throw new AppError(Errors.INVALID_CREDENTIALS, 400);
+  const now = moment();
+
+  if (!existingRequest || moment(existingRequest.expireDate).isBefore(now)) {
+    if (existingRequest) {
+      await existingRequest!.update({ state: Enums.PasswordResetRequestStates.EXPIRED });
+    }
+    throw new AppError(Errors.REQUEST_NOT_FOUND_OR_EXPIRED, 404);
   }
 
-  const passwordResetRequest = await PasswordResetRequest.findOne({
-    where: { shortCodeId: shortCode.id, customerId: customer.id, state: Enums.PasswordResetRequestStates.PENDING },
-  });
+  await customer.update({ hashPassword: bcrypt.hashSync(options.newPassword, bcrypt.genSaltSync(10)) });
 
-  if (!passwordResetRequest) {
-    throw new AppError(Errors.REQUEST_NOT_FOUND, 400);
-  }
-
-  if (moment(passwordResetRequest.expireDate).isBefore(moment())) {
-    passwordResetRequest.state = Enums.PasswordResetRequestStates.EXPIRED;
-    passwordResetRequest.save();
-
-    throw new AppError(Errors.REQUEST_EXPIRED, 400);
-  }
-
-  customer.hashPassword = bcrypt.hashSync(options.password, bcrypt.genSaltSync(10));
-  customer.save();
-
-  passwordResetRequest.state = Enums.PasswordResetRequestStates.COMPLETED;
-  passwordResetRequest.save();
+  await existingRequest.update({ state: Enums.PasswordResetRequestStates.COMPLETED });
 }

@@ -23,5 +23,5 @@ export interface postRegisterBody {
 export interface postResetPasswordBody {
   email: string;
   shortCode: string;
-  password: string;
+  newPassword: string;
 }

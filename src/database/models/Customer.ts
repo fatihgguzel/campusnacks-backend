@@ -22,8 +22,12 @@ class Customer extends BaseModel {
   public readonly verificationShortCode?: ShortCode | null;
   public getVerificationShortCode!: BelongsToGetAssociationMixin<ShortCode>;
 
+  public readonly address!: Address;
+  public getAddress!: BelongsToGetAssociationMixin<Address>;
+
   public static associations: {
     verificationShortCode: Association<Customer, ShortCode>;
+    address: Association<Customer, Address>;
   };
 }
 
