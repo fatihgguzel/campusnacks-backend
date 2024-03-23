@@ -1,6 +1,7 @@
 'use strict';
 
 const { OptionsTypes } = require('../../../dist/types/enums');
+const {stringify} = require("../../../dist/helpers");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -8,13 +9,13 @@ module.exports = {
     await queryInterface.bulkInsert('Options', [
       {
         optionsType: OptionsTypes.DEFAULT,
-        //todo add options data
+        data: stringify({ data: 123 }),
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         optionsType: OptionsTypes.DEFAULT,
-        //todo add options data
+        data: stringify({ data: 123 }),
         createdAt: new Date(),
         updatedAt: new Date(),
       },

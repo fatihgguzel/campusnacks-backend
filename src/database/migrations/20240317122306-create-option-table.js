@@ -16,6 +16,10 @@ module.exports = {
         defaultValue: OptionsTypes.DEFAULT,
         allowNull: false,
       },
+      data: {
+        type: DataTypes.JSON,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

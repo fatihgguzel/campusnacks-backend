@@ -8,6 +8,7 @@ import Item from './Item';
 class Option extends BaseModel {
   public id!: number;
   public optionsType!: string;
+  public data!: JSON;
   //todo add options data
   public readonly item!: Item;
   public getItem!: BelongsToGetAssociationMixin<Item>;
@@ -24,6 +25,10 @@ Option.init(
       primaryKey: true,
       unique: true,
       autoIncrement: true,
+      allowNull: false,
+    },
+    data: {
+      type: DataTypes.JSON,
       allowNull: false,
     },
     optionsType: {
