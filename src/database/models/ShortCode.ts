@@ -1,17 +1,17 @@
 import { BelongsToGetAssociationMixin, DataTypes, Association } from 'sequelize';
 import sequelize from '../sequelize';
 import BaseModel from './BaseModel';
-import Customer from './Customer';
+import User from './User';
 
 class ShortCode extends BaseModel {
   public id!: number;
   public value!: string;
 
-  public readonly customer!: Customer;
-  public getCustomer!: BelongsToGetAssociationMixin<Customer>;
+  public readonly user!: User;
+  public getUser!: BelongsToGetAssociationMixin<User>;
 
   public static associations: {
-    restaurant: Association<ShortCode, Customer>;
+    restaurant: Association<ShortCode, User>;
   };
 }
 

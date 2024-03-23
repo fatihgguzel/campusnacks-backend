@@ -1,6 +1,6 @@
 import BusinessHour from './BusinessHour';
 import Cuisine from './Cuisine';
-import Customer from './Customer';
+import User from './User';
 import Item from './Item';
 import Menu from './Menu';
 import MenuProduct from './MenuProduct';
@@ -12,7 +12,7 @@ import Restaurant from './Restaurant';
 import Review from './Review';
 import ShortCode from './ShortCode';
 import Option from './Option';
-import CustomerAddress from './CustomerAddress';
+import UserAddress from './UserAddress';
 import RestaurantAddress from './RestaurantAddress';
 
 console.log('Loading DB relations');
@@ -42,9 +42,9 @@ OrderLog.belongsTo(Restaurant, {
   foreignKey: 'restaurantId',
 });
 
-Order.belongsTo(Customer, {
-  as: 'customer',
-  foreignKey: 'customerId',
+Order.belongsTo(User, {
+  as: 'user',
+  foreignKey: 'userId',
 });
 
 Order.belongsTo(Restaurant, {
@@ -67,28 +67,28 @@ Order.hasMany(OrderItem, {
   foreignKey: 'orderId',
 });
 
-Customer.belongsTo(ShortCode, {
+User.belongsTo(ShortCode, {
   as: 'verificationShortCode',
   foreignKey: 'verificationShortCodeId',
 });
 
-Customer.belongsTo(CustomerAddress, {
+User.belongsTo(UserAddress, {
   as: 'address',
   foreignKey: 'addressId',
 });
 
-Customer.hasMany(Order, {
+User.hasMany(Order, {
   as: 'orders',
-  foreignKey: 'customerId',
+  foreignKey: 'userId',
 });
 
-CustomerAddress.hasOne(Customer, {
-  as: 'customer',
+UserAddress.hasOne(User, {
+  as: 'user',
   foreignKey: 'addressId',
 });
 
-ShortCode.hasOne(Customer, {
-  as: 'customer',
+ShortCode.hasOne(User, {
+  as: 'user',
   foreignKey: 'verificationShortCodeId',
 });
 

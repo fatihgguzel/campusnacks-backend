@@ -1,26 +1,26 @@
-import Customer from '../database/models/Customer';
+import User from '../database/models/User';
 import bcrypt from 'bcrypt';
 import { shortCodeGenerator } from '../helpers';
 import ShortCode from '../database/models/ShortCode';
 import * as Enums from '../types/enums';
 import { v4 as uuid } from 'uuid';
 import sequelize from '../database/sequelize';
-import CustomerAddress from '../database/models/CustomerAddress';
+import UserAddress from '../database/models/UserAddress';
 
-interface ICreateCustomerOptions {
+interface ICreateUserOptions {
   email: string;
   fullName: string;
   phoneNumber: string;
-  role: Enums.CustomerRoleTypes;
-  provider: Enums.CustomerProviders;
+  role: Enums.UserRoleTypes;
+  provider: Enums.UserProviders;
   password: string;
   city: string;
   district: string;
   address: string;
   jwtSecureCode?: string;
 }
-export async function createCustomer(options: ICreateCustomerOptions) {
-  const customer = await sequelize.transaction(async (transaction) => {
+export async function createUser(options: ICreateUserOptions) {
+  const user = await sequelize.transaction(async (transaction) => {
     const verificationShortCode = await ShortCode.create(
       {
         value: await shortCodeGenerator(),
@@ -30,7 +30,7 @@ export async function createCustomer(options: ICreateCustomerOptions) {
       },
     );
 
-    const address = await CustomerAddress.create(
+    const address = await UserAddress.create(
       {
         city: options.city,
         district: options.district,
@@ -41,7 +41,7 @@ export async function createCustomer(options: ICreateCustomerOptions) {
       },
     );
 
-    const customer = await Customer.create(
+    const user = await User.create(
       {
         email: options.email,
         fullName: options.fullName,
@@ -58,8 +58,8 @@ export async function createCustomer(options: ICreateCustomerOptions) {
       },
     );
 
-    return customer;
+    return user;
   });
 
-  return customer;
+  return user;
 }

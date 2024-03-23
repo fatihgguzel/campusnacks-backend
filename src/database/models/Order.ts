@@ -2,22 +2,22 @@ import { BelongsToGetAssociationMixin, DataTypes, Association } from 'sequelize'
 import sequelize from '../sequelize';
 import * as Enums from '../../types/enums';
 import BaseModel from './BaseModel';
-import Customer from './Customer';
+import User from './User';
 import Restaurant from './Restaurant';
 import Review from './Review';
 import OrderLog from './OrderLog';
 
 class Order extends BaseModel {
   public id!: number;
-  public customerId!: number;
+  public userId!: number;
   public restaurantId!: number;
   public status!: string;
   public orderDate!: Date;
   public deliveredDate!: Date | null;
   public deliveryType!: string;
 
-  public readonly customer!: Customer;
-  public getCustomer!: BelongsToGetAssociationMixin<Customer>;
+  public readonly user!: User;
+  public getUser!: BelongsToGetAssociationMixin<User>;
 
   public readonly restaurant!: Restaurant;
   public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
@@ -29,7 +29,7 @@ class Order extends BaseModel {
   public getOrderLog!: BelongsToGetAssociationMixin<Review | null>;
 
   public static associations: {
-    customer: Association<Order, Customer>;
+    user: Association<Order, User>;
     restaurant: Association<Order, Restaurant>;
     review: Association<Order, Review>;
     orderLog: Association<Order, OrderLog>;
@@ -45,11 +45,11 @@ Order.init(
       autoIncrement: true,
       allowNull: false,
     },
-    customerId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: Customer,
+        model: User,
       },
     },
     restaurantId: {

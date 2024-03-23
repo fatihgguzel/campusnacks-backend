@@ -1,11 +1,11 @@
 'use strict';
 
-const { CustomerRoleTypes, CustomerProviders } = require('../../../dist/types/enums');
+const { UserRoleTypes, UserProviders } = require('../../../dist/types/enums');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.bulkInsert('Customers', [
+    await queryInterface.bulkInsert('Users', [
       {
         email: 'email@mail.com',
         fullName: 'loremipsum',
@@ -13,8 +13,8 @@ module.exports = {
         verificationShortCodeId: null,
         verificationDate: null,
         phoneNumber: 'loremipsum',
-        role: CustomerRoleTypes.DEFAULT,
-        provider: CustomerProviders.CAMPUSNACKS,
+        role: UserRoleTypes.DEFAULT,
+        provider: UserProviders.CAMPUSNACKS,
         hashPassword: 'hash-passwrd',
         studentshipExpiresAt: null,
         jwtSecureCode: 'secure-code',
@@ -28,8 +28,8 @@ module.exports = {
         verificationShortCodeId: null,
         verificationDate: null,
         phoneNumber: 'loremipsum',
-        role: CustomerRoleTypes.STUDENT,
-        provider: CustomerProviders.GOOGLE,
+        role: UserRoleTypes.STUDENT,
+        provider: UserProviders.GOOGLE,
         hashPassword: 'hash-passwrd',
         studentshipExpiresAt: null,
         jwtSecureCode: 'secure-code',
@@ -40,6 +40,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('Customers');
+    await queryInterface.dropTable('Users');
   },
 };

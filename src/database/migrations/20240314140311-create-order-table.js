@@ -11,9 +11,9 @@ module.exports = {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      customerId: {
+      userId: {
         allowNull: false,
-        references: { model: 'Customers', key: 'id' },
+        references: { model: 'Users', key: 'id' },
         type: DataTypes.INTEGER,
       },
       restaurantId: {

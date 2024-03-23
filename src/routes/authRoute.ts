@@ -36,7 +36,7 @@ export const swAuthRouter = {
   },
   '/api/auth/register': {
     post: {
-      summary: 'Register customer',
+      summary: 'Register user',
       tags: ['Auth'],
       requestBody: {
         content: {
@@ -67,12 +67,12 @@ router.post(
     try {
       const body = req.body as RequestObjectsTypes.postRegisterBody;
 
-      const { authToken } = await AuthService.registerCustomer({
+      const { authToken } = await AuthService.registerUser({
         email: body.email,
         fullName: body.fullName,
         phoneNumber: body.phoneNumber,
-        role: Enums.CustomerRoleTypes.DEFAULT,
-        provider: Enums.CustomerProviders.CAMPUSNACKS,
+        role: Enums.UserRoleTypes.DEFAULT,
+        provider: Enums.UserProviders.CAMPUSNACKS,
         password: body.password,
         city: body.city,
         district: body.district,

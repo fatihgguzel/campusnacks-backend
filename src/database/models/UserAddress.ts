@@ -1,18 +1,18 @@
 import { Association, BelongsToGetAssociationMixin, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 import Address from './Address';
-import Customer from './Customer';
+import User from './User';
 
-class CustomerAddress extends Address {
-  public readonly customer!: Customer;
-  public getCustomerAddress!: BelongsToGetAssociationMixin<Customer>;
+class UserAddress extends Address {
+  public readonly user!: User;
+  public getUserAddress!: BelongsToGetAssociationMixin<User>;
 
   public static associations: {
-    customer: Association<CustomerAddress, Customer>;
+    user: Association<UserAddress, User>;
   };
 }
 
-CustomerAddress.init(
+UserAddress.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -41,4 +41,4 @@ CustomerAddress.init(
   },
 );
 
-export default CustomerAddress;
+export default UserAddress;

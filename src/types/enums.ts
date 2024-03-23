@@ -3,12 +3,12 @@ export enum AuditLogTypes {
   ERROR = '1',
 }
 
-export enum CustomerProviders {
+export enum UserProviders {
   CAMPUSNACKS = '0',
   GOOGLE = '1',
 }
 
-export enum CustomerRoleTypes {
+export enum UserRoleTypes {
   DEFAULT = '0',
   STUDENT = '1',
 }

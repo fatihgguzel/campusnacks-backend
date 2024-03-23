@@ -7,7 +7,7 @@ module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert('Orders', [
       {
-        customerId: 1,
+        userId: 1,
         restaurantId: 1,
         status: OrderStatusTypes.DEFAULT,
         orderDate: new Date(),
