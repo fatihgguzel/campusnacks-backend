@@ -18,8 +18,8 @@ class Item extends BaseModel {
   public price!: number;
   public restaurantId!: number;
   public cuisineId!: number;
-  public productId!: number;
-  public menuId!: number;
+  public productId!: number; // todo make it nullable
+  public menuId!: number; // todo make it nullable
   public optionId!: number | null;
 
   public readonly restaurant?: Restaurant;

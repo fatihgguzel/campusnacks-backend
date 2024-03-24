@@ -91,24 +91,30 @@ router.post(
   },
 );
 
-router.post('/login', validate({ body: RequestObjects.postLoginBody }), async (req: Request, res: Response) => {
-  try {
-    const body = req.body as RequestObjectsTypes.postLoginBody;
+router.post(
+  '/login',
+  validate({
+    body: RequestObjects.postLoginBody,
+  }),
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body as RequestObjectsTypes.postLoginBody;
 
-    const { authToken } = await AuthService.loginCustomer({
-      email: body.email,
-      password: body.password,
-    });
+      const { authToken } = await AuthService.loginUser({
+        email: body.email,
+        password: body.password,
+      });
 
-    Helpers.response(res, {
-      data: {
-        authToken,
-      },
-      message: 'Successfully logged in',
-    });
-  } catch (err) {
-    Helpers.error(res, err);
-  }
-});
+      Helpers.response(res, {
+        data: {
+          authToken,
+        },
+        message: 'Successfully logged in',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
 
 export default router;
