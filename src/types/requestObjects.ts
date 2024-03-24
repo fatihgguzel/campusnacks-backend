@@ -5,6 +5,10 @@ export interface getConfigTypeFileParams {
   fileName: string;
 }
 
+export interface postForgotPasswordBody {
+  email: string;
+}
+
 export interface postLoginBody {
   email: string;
   password: string;
@@ -18,4 +22,10 @@ export interface postRegisterBody {
   city: string;
   district: string;
   address: string;
+}
+
+export interface postResetPasswordBody {
+  email: string;
+  shortCode: string;
+  newPassword: string;
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 const { OptionsTypes } = require('../../../dist/types/enums');
-const {stringify} = require("../../../dist/helpers");
+const { stringify } = require('../../../dist/helpers');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {

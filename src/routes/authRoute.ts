@@ -56,6 +56,50 @@ export const swAuthRouter = {
       },
     },
   },
+  '/api/auth/password/email': {
+    post: {
+      summary: 'Send password reset link to email',
+      tags: ['Auth'],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: j2s(RequestObjects.postForgotPasswordBody).swagger,
+          },
+        },
+      },
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.postForgotPasswordResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
+  'api/auth/password/reset': {
+    post: {
+      summary: 'Update password of user',
+      tags: ['Auth'],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: j2s(RequestObjects.postResetPasswordBody).swagger,
+          },
+        },
+      },
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.postResetPasswordResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 router.post(
@@ -111,6 +155,44 @@ router.post(
         },
         message: 'Successfully logged in',
       });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.post(
+  '/password/email',
+  validate({ body: RequestObjects.postForgotPasswordBody }),
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body as RequestObjectsTypes.postForgotPasswordBody;
+
+      await AuthService.forgotPassword({
+        email: body.email,
+      });
+
+      Helpers.response(res, { message: 'Password reset email is sent successfully' });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.post(
+  '/password/reset',
+  validate({ body: RequestObjects.postResetPasswordBody }),
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body as RequestObjectsTypes.postResetPasswordBody;
+
+      await AuthService.resetPassword({
+        email: body.email,
+        shortCode: body.shortCode,
+        newPassword: body.newPassword,
+      });
+
+      Helpers.response(res, { message: 'Password updated sucessfully' });
     } catch (err) {
       Helpers.error(res, err);
     }

@@ -67,3 +67,9 @@ export enum OptionsTypes {
 export enum OrderLogTypes {
   PURCHASE = '0',
 }
+
+export enum PasswordResetRequestStates {
+  PENDING = '0',
+  COMPLETED = '1',
+  EXPIRED = '2',
+}

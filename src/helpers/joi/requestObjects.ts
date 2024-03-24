@@ -30,3 +30,19 @@ export const getConfigTypeFileParams = genericJoi
   })
   .required()
   .label('getConfigTypeFileParams');
+
+export const postForgotPasswordBody = genericJoi
+  .obj({
+    email: genericJoi.email.required(),
+  })
+  .required()
+  .label('postForgotPasswordBody');
+
+export const postResetPasswordBody = genericJoi
+  .obj({
+    email: genericJoi.email.required(),
+    shortCode: genericJoi.stringTrimmed.required(),
+    newPassword: genericJoi.password.required(),
+  })
+  .required()
+  .label('postResetPasswordBody');

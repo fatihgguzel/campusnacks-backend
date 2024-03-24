@@ -14,6 +14,7 @@ import ShortCode from './ShortCode';
 import Option from './Option';
 import UserAddress from './UserAddress';
 import RestaurantAddress from './RestaurantAddress';
+import PasswordResetRequest from './PasswordResetRequest';
 
 console.log('Loading DB relations');
 
@@ -185,4 +186,14 @@ Menu.hasOne(Item, {
 Menu.hasMany(MenuProduct, {
   as: 'menuProducts',
   foreignKey: 'menuId',
+});
+
+PasswordResetRequest.belongsTo(User, {
+  as: 'user',
+  foreignKey: 'userId',
+});
+
+PasswordResetRequest.belongsTo(ShortCode, {
+  as: 'passwordResetShortCode',
+  foreignKey: 'passwordResetShortCodeId',
 });
