@@ -8,7 +8,7 @@ class RestaurantAddress extends Address {
   public street!: string;
   public no!: number;
 
-  public readonly restaurant!: Restaurant;
+  public readonly restaurant?: Restaurant;
   public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
 
   public static associations: {

@@ -9,10 +9,10 @@ class Menu extends BaseModel {
   public hasBadge!: boolean;
   public badgeTag!: string | null;
 
-  public readonly item!: Item;
+  public readonly item?: Item;
   public getItem!: BelongsToGetAssociationMixin<Item>;
 
-  public readonly menuProducts!: MenuProduct[];
+  public readonly menuProducts?: MenuProduct[];
   public getMenuProducts!: BelongsToManyGetAssociationsMixin<MenuProduct>;
 
   public static associations: {

@@ -11,7 +11,7 @@ class BusinessHour extends BaseModel {
   public closingTime!: Date;
   public restaurantId!: number;
 
-  public readonly restaurant!: Restaurant;
+  public readonly restaurant?: Restaurant;
   public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
 
   public static associations: {

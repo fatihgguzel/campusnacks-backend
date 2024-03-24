@@ -9,10 +9,10 @@ class OrderItem extends BaseModel {
   public itemId!: number;
   public orderId!: number;
 
-  public readonly item!: Item;
+  public readonly item?: Item;
   public getItem!: BelongsToGetAssociationMixin<Item>;
 
-  public readonly order!: Order;
+  public readonly order?: Order;
   public getOrder!: BelongsToGetAssociationMixin<Order>;
 
   public static associations: {

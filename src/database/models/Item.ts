@@ -22,22 +22,22 @@ class Item extends BaseModel {
   public menuId!: number;
   public optionId!: number | null;
 
-  public readonly restaurant!: Restaurant;
+  public readonly restaurant?: Restaurant;
   public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
 
-  public readonly cuisine!: Cuisine;
+  public readonly cuisine?: Cuisine;
   public getCuisine!: BelongsToGetAssociationMixin<Cuisine>;
 
-  public readonly product!: Product;
+  public readonly product?: Product;
   public getProduct!: BelongsToGetAssociationMixin<Product>;
 
-  public readonly menu!: Menu;
+  public readonly menu?: Menu;
   public getMenu!: BelongsToGetAssociationMixin<Menu>;
 
-  public readonly orderItems!: OrderItem[];
+  public readonly orderItems?: OrderItem[];
   public getOrderItems!: BelongsToManyGetAssociationsMixin<OrderItem>;
 
-  public readonly option!: Option | null;
+  public readonly option?: Option | null;
   public getOption!: BelongsToGetAssociationMixin<Option>;
 
   public static associations: {

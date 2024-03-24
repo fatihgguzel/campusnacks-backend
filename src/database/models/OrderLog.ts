@@ -10,10 +10,10 @@ class OrderLog extends BaseModel {
   public orderId!: number;
   public restaurantId!: number;
 
-  public readonly order!: Order;
+  public readonly order?: Order;
   public getOrder!: BelongsToGetAssociationMixin<Order>;
 
-  public readonly restaurant!: Restaurant;
+  public readonly restaurant?: Restaurant;
   public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
 
   public static associations: {

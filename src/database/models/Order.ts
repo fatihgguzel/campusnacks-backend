@@ -16,16 +16,16 @@ class Order extends BaseModel {
   public deliveredDate!: Date | null;
   public deliveryType!: string;
 
-  public readonly user!: User;
+  public readonly user?: User;
   public getUser!: BelongsToGetAssociationMixin<User>;
 
-  public readonly restaurant!: Restaurant;
+  public readonly restaurant?: Restaurant;
   public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
 
-  public readonly review!: Review | null;
+  public readonly review?: Review | null;
   public getReview!: BelongsToGetAssociationMixin<Review | null>;
 
-  public readonly orderLog!: OrderLog;
+  public readonly orderLog?: OrderLog;
   public getOrderLog!: BelongsToGetAssociationMixin<Review | null>;
 
   public static associations: {

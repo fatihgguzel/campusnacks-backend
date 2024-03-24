@@ -4,7 +4,7 @@ import Address from './Address';
 import User from './User';
 
 class UserAddress extends Address {
-  public readonly user!: User;
+  public readonly user?: User;
   public getUserAddress!: BelongsToGetAssociationMixin<User>;
 
   public static associations: {

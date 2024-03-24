@@ -9,10 +9,10 @@ class MenuProduct extends BaseModel {
   public productId!: number;
   public menuId!: number;
 
-  public readonly product!: Product;
+  public readonly product?: Product;
   public getProduct!: BelongsToGetAssociationMixin<Product>;
 
-  public readonly menu!: Menu;
+  public readonly menu?: Menu;
   public getMenu!: BelongsToGetAssociationMixin<Menu>;
 
   public static associations: {

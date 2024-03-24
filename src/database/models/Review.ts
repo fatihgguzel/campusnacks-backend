@@ -10,7 +10,7 @@ class Review extends BaseModel {
   public star!: number; //todo make it enum type
   public date!: Date;
 
-  public readonly order!: Order;
+  public readonly order?: Order;
   public getOrder!: BelongsToGetAssociationMixin<Order>;
 
   public static associations: {

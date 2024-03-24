@@ -20,13 +20,13 @@ class User extends BaseModel {
   public studentshipExpiresAt!: Date | null; //TODO cron job to change role after expiration
   public jwtSecureCode!: string;
 
-  public readonly address!: UserAddress;
+  public readonly address?: UserAddress;
   public getAddress!: BelongsToGetAssociationMixin<UserAddress>;
 
   public readonly verificationShortCode?: ShortCode | null;
   public getVerificationShortCode!: BelongsToGetAssociationMixin<ShortCode>;
 
-  public readonly orders!: Order[];
+  public readonly orders?: Order[];
   public getOrders!: BelongsToManyGetAssociationsMixin<Order>;
 
   public static associations: {

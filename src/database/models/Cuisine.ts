@@ -8,7 +8,7 @@ class Cuisine extends BaseModel {
   public id!: number;
   public cuisineType!: string;
 
-  public readonly item!: Item;
+  public readonly item?: Item;
   public getItem!: BelongsToGetAssociationMixin<Item>;
 
   public static associations: {
