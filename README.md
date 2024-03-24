@@ -9,6 +9,7 @@
 - Run `npm run build` to compile project.
 - use `npm run db:reset` to reset the DB.
 - use `npm run 'db:migrate'` to get latest migrations.
+- use `npm run 'db:seed'` to seeding.
 
 ## Linting
 All code must be properly linted.

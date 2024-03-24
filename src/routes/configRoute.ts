@@ -42,7 +42,9 @@ export const swConfigRouter = {
 
 router.get(
   '/types/:fileName',
-  validate({ params: RequestObjects.getConfigTypeFileParams }),
+  validate({
+    params: RequestObjects.getConfigTypeFileParams,
+  }),
   async (req: Request, res: Response) => {
     try {
       const params = req.params as unknown as RequestObjectsTypes.getConfigTypeFileParams;

@@ -1,10 +1,12 @@
-import { Association, BelongsToGetAssociationMixin, DataTypes } from 'sequelize';
+import { Association, BelongsToGetAssociationMixin, BelongsToManyGetAssociationsMixin, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 import * as Enums from '../../types/enums';
-import ShortCode from './ShortCode';
 import BaseModel from './BaseModel';
+import ShortCode from './ShortCode';
+import Order from './Order';
+import UserAddress from './UserAddress';
 
-class Customer extends BaseModel {
+class User extends BaseModel {
   public id!: number;
   public email!: string;
   public fullName!: string;
@@ -18,15 +20,23 @@ class Customer extends BaseModel {
   public studentshipExpiresAt!: Date | null; //TODO cron job to change role after expiration
   public jwtSecureCode!: string;
 
+  public readonly address?: UserAddress;
+  public getAddress!: BelongsToGetAssociationMixin<UserAddress>;
+
   public readonly verificationShortCode?: ShortCode | null;
   public getVerificationShortCode!: BelongsToGetAssociationMixin<ShortCode>;
 
+  public readonly orders?: Order[];
+  public getOrders!: BelongsToManyGetAssociationsMixin<Order>;
+
   public static associations: {
-    verificationShortCode: Association<Customer, ShortCode>;
+    verificationShortCode: Association<User, ShortCode>;
+    address: Association<User, UserAddress>;
+    orders: Association<User, Order>;
   };
 }
 
-Customer.init(
+User.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -46,7 +56,9 @@ Customer.init(
     },
     addressId: {
       type: DataTypes.INTEGER,
-      // TODO references: {}
+      references: {
+        model: UserAddress,
+      },
       defaultValue: null,
       allowNull: true,
     },
@@ -68,13 +80,13 @@ Customer.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM(...Object.values(Enums.CustomerRoleTypes)),
-      defaultValue: Enums.CustomerRoleTypes.DEFAULT,
+      type: DataTypes.ENUM(...Object.values(Enums.UserRoleTypes)),
+      defaultValue: Enums.UserRoleTypes.DEFAULT,
       allowNull: false,
     },
     provider: {
-      type: DataTypes.ENUM(...Object.values(Enums.CustomerProviders)),
-      defaultValue: Enums.CustomerProviders.CAMPUSNACKS,
+      type: DataTypes.ENUM(...Object.values(Enums.UserProviders)),
+      defaultValue: Enums.UserProviders.CAMPUSNACKS,
       allowNull: false,
     },
     hashPassword: {
@@ -98,4 +110,4 @@ Customer.init(
   },
 );
 
-export default Customer;
+export default User;
