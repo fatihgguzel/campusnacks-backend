@@ -7,12 +7,12 @@ module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert('Cuisines', [
       {
-        cuisineType: CuisineTypes.DEFAULT,
+        cuisineType: CuisineTypes.ITALIAN,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        cuisineType: CuisineTypes.DEFAULT,
+        cuisineType: CuisineTypes.MEXICAN,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

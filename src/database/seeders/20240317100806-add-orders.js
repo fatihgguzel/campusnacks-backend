@@ -9,10 +9,10 @@ module.exports = {
       {
         userId: 1,
         restaurantId: 1,
-        status: OrderStatusTypes.DEFAULT,
+        status: OrderStatusTypes.PENDING,
         orderDate: new Date(),
         deliveredDate: null,
-        deliveryType: DeliveryTypes.DEFAULT,
+        deliveryType: DeliveryTypes.PICKUP,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

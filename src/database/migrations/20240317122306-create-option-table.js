@@ -13,7 +13,6 @@ module.exports = {
       },
       optionsType: {
         type: DataTypes.ENUM(...Object.values(OptionsTypes)),
-        defaultValue: OptionsTypes.DEFAULT,
         allowNull: false,
       },
       data: {

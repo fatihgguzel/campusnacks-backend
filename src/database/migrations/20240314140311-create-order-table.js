@@ -23,7 +23,6 @@ module.exports = {
       },
       status: {
         type: DataTypes.ENUM(...Object.values(OrderStatusTypes)),
-        defaultValue: OrderStatusTypes.DEFAULT,
         allowNull: false,
       },
       orderDate: {
@@ -36,7 +35,6 @@ module.exports = {
       },
       deliveryType: {
         type: DataTypes.ENUM(...Object.values(DeliveryTypes)),
-        defaultValue: DeliveryTypes.DEFAULT,
         allowNull: false,
       },
       createdAt: {

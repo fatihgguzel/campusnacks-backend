@@ -27,7 +27,6 @@ Cuisine.init(
     },
     cuisineType: {
       type: DataTypes.ENUM(...Object.values(Enums.CuisineTypes)),
-      defaultValue: Enums.CuisineTypes.DEFAULT,
       allowNull: false,
     },
   },

@@ -47,8 +47,14 @@ module.exports = {
         type: DataTypes.DATE,
       },
     });
+
+    await queryInterface.addIndex('RestaurantAddresses', ['city', 'district'], {
+      name: 'restaurantaddresses_city_district',
+    });
   },
   down: async (queryInterface) => {
+    await queryInterface.removeIndex('RestaurantAddresses', 'restaurantaddresses_city_district');
+
     await queryInterface.dropTable('RestaurantAddresses');
   },
 };

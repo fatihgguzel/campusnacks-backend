@@ -14,7 +14,6 @@ module.exports = {
       productType: {
         allowNull: false,
         type: DataTypes.ENUM(...Object.values(ProductTypes)),
-        defaultValue: ProductTypes.DEFAULT,
       },
       createdAt: {
         allowNull: false,

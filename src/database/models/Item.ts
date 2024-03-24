@@ -1,11 +1,10 @@
-import { DataTypes, BelongsToGetAssociationMixin, BelongsToManyGetAssociationsMixin, Association } from 'sequelize';
+import { DataTypes, BelongsToGetAssociationMixin, Association } from 'sequelize';
 import sequelize from '../sequelize';
 import BaseModel from './BaseModel';
 import Cuisine from './Cuisine';
 import Menu from './Menu';
 import Product from './Product';
 import Restaurant from './Restaurant';
-import OrderItem from './OrderItem';
 import Option from './Option';
 
 class Item extends BaseModel {
@@ -18,8 +17,8 @@ class Item extends BaseModel {
   public price!: number;
   public restaurantId!: number;
   public cuisineId!: number;
-  public productId!: number; // todo make it nullable
-  public menuId!: number; // todo make it nullable
+  public productId!: number | null;
+  public menuId!: number | null;
   public optionId!: number | null;
 
   public readonly restaurant?: Restaurant;
@@ -28,14 +27,11 @@ class Item extends BaseModel {
   public readonly cuisine?: Cuisine;
   public getCuisine!: BelongsToGetAssociationMixin<Cuisine>;
 
-  public readonly product?: Product;
+  public readonly product?: Product | null;
   public getProduct!: BelongsToGetAssociationMixin<Product>;
 
-  public readonly menu?: Menu;
+  public readonly menu?: Menu | null;
   public getMenu!: BelongsToGetAssociationMixin<Menu>;
-
-  public readonly orderItems?: OrderItem[];
-  public getOrderItems!: BelongsToManyGetAssociationsMixin<OrderItem>;
 
   public readonly option?: Option | null;
   public getOption!: BelongsToGetAssociationMixin<Option>;
@@ -45,7 +41,6 @@ class Item extends BaseModel {
     cuisine: Association<Item, Cuisine>;
     product: Association<Item, Product>;
     menu: Association<Item, Menu>;
-    orderItems: Association<Item, OrderItem>;
     option: Association<Item, Option>;
   };
 }
@@ -102,14 +97,14 @@ Item.init(
       references: {
         model: Product,
       },
-      allowNull: false,
+      allowNull: true,
     },
     menuId: {
       type: DataTypes.INTEGER,
       references: {
         model: Menu,
       },
-      allowNull: false,
+      allowNull: true,
     },
     optionId: {
       type: DataTypes.INTEGER,

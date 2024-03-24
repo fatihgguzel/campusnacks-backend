@@ -23,10 +23,10 @@ class Order extends BaseModel {
   public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
 
   public readonly review?: Review | null;
-  public getReview!: BelongsToGetAssociationMixin<Review | null>;
+  public getReview!: BelongsToGetAssociationMixin<Review>;
 
   public readonly orderLog?: OrderLog;
-  public getOrderLog!: BelongsToGetAssociationMixin<Review | null>;
+  public getOrderLog!: BelongsToGetAssociationMixin<Review>;
 
   public static associations: {
     user: Association<Order, User>;
@@ -61,7 +61,6 @@ Order.init(
     },
     status: {
       type: DataTypes.ENUM(...Object.values(Enums.OrderStatusTypes)),
-      defaultValue: Enums.OrderStatusTypes.DEFAULT,
       allowNull: false,
     },
     orderDate: {
@@ -74,7 +73,6 @@ Order.init(
     },
     deliveryType: {
       type: DataTypes.ENUM(...Object.values(Enums.DeliveryTypes)),
-      defaultValue: Enums.DeliveryTypes.DEFAULT,
       allowNull: false,
     },
   },

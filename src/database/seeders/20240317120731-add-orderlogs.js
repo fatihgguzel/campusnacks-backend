@@ -1,5 +1,7 @@
 'use strict';
 
+const { OrderLogTypes } = require('../../../dist/types/enums');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
@@ -8,6 +10,7 @@ module.exports = {
         csComission: 20,
         orderId: 1,
         restaurantId: 1,
+        orderLogType: OrderLogTypes.PURCHASE,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

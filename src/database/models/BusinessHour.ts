@@ -31,7 +31,6 @@ BusinessHour.init(
     dayOfWeek: {
       type: DataTypes.ENUM(...Object.values(Enums.DayOfWeek)),
       allowNull: false,
-      defaultValue: Enums.DayOfWeek.MONDAY,
     },
     openingTime: {
       type: DataTypes.TIME,

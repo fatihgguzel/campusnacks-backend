@@ -33,7 +33,6 @@ Option.init(
     },
     optionsType: {
       type: DataTypes.ENUM(...Object.values(OptionsTypes)),
-      defaultValue: OptionsTypes.DEFAULT,
       allowNull: false,
     },
   },

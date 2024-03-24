@@ -14,7 +14,6 @@ module.exports = {
       cuisineType: {
         allowNull: false,
         type: DataTypes.ENUM(...Object.values(CuisineTypes)),
-        defaultValue: CuisineTypes.DEFAULT,
       },
       createdAt: {
         allowNull: false,

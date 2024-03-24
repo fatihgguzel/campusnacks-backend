@@ -1,4 +1,4 @@
-import { Association, BelongsToGetAssociationMixin, BelongsToManyGetAssociationsMixin, DataTypes } from 'sequelize';
+import { Association, BelongsToGetAssociationMixin, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 import { ProductTypes } from '../../types/enums';
 import BaseModel from './BaseModel';
@@ -12,12 +12,12 @@ class Product extends BaseModel {
   public readonly item?: Item;
   public getItem!: BelongsToGetAssociationMixin<Item>;
 
-  public readonly menuProducts?: MenuProduct[];
-  public getMenuProducts!: BelongsToManyGetAssociationsMixin<MenuProduct>;
+  public readonly menuProduct?: MenuProduct;
+  public getMenuProduct!: BelongsToGetAssociationMixin<MenuProduct>;
 
   public static associations: {
     item: Association<Product, Item>;
-    menuProducts: Association<Product, MenuProduct>;
+    menuProduct: Association<Product, MenuProduct>;
   };
 }
 
@@ -32,7 +32,6 @@ Product.init(
     },
     productType: {
       type: DataTypes.ENUM(...Object.values(ProductTypes)),
-      defaultValue: ProductTypes.DEFAULT,
       allowNull: false,
     },
   },

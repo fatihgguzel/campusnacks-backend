@@ -87,11 +87,6 @@ UserAddress.hasOne(User, {
   foreignKey: 'addressId',
 });
 
-ShortCode.hasOne(User, {
-  as: 'user',
-  foreignKey: 'verificationShortCodeId',
-});
-
 Restaurant.belongsTo(RestaurantAddress, {
   as: 'address',
   foreignKey: 'addressId',
@@ -152,11 +147,6 @@ Item.belongsTo(Option, {
   foreignKey: 'optionId',
 });
 
-Item.hasMany(OrderItem, {
-  as: 'orderItems',
-  foreignKey: 'itemId',
-});
-
 Option.hasOne(Item, {
   as: 'item',
   foreignKey: 'optionId',
@@ -182,8 +172,8 @@ Product.hasOne(Item, {
   foreignKey: 'productId',
 });
 
-Product.hasMany(MenuProduct, {
-  as: 'menuProducts',
+Product.hasOne(MenuProduct, {
+  as: 'menuProduct',
   foreignKey: 'productId',
 });
 

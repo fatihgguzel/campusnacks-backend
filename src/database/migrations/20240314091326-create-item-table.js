@@ -45,11 +45,11 @@ module.exports = {
       },
       productId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       menuId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       optionId: {
         type: DataTypes.INTEGER,

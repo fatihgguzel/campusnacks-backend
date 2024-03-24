@@ -3,10 +3,12 @@ import sequelize from '../sequelize';
 import BaseModel from './BaseModel';
 import Restaurant from './Restaurant';
 import Order from './Order';
+import * as Enums from '../../types/enums';
 
 class OrderLog extends BaseModel {
   public id!: number;
-  public csComission!: number; // todo make it enum
+  public csComission!: number;
+  public orderLogType!: string;
   public orderId!: number;
   public restaurantId!: number;
 
@@ -33,6 +35,10 @@ OrderLog.init(
     },
     csComission: {
       type: DataTypes.DOUBLE,
+      allowNull: false,
+    },
+    orderLogType: {
+      type: DataTypes.ENUM(...Object.values(Enums.OrderLogTypes)),
       allowNull: false,
     },
     orderId: {

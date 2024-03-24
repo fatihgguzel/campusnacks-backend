@@ -32,10 +32,16 @@ MenuProduct.init(
     },
     productId: {
       type: DataTypes.INTEGER,
+      references: {
+        model: Product,
+      },
       allowNull: false,
     },
     menuId: {
       type: DataTypes.INTEGER,
+      references: {
+        model: Menu,
+      },
       allowNull: false,
     },
   },

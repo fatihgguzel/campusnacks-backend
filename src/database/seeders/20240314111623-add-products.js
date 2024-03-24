@@ -7,12 +7,12 @@ module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert('Products', [
       {
-        productType: ProductTypes.DEFAULT,
+        productType: ProductTypes.PIZZA,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        productType: ProductTypes.DEFAULT,
+        productType: ProductTypes.BURGER,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

@@ -1,5 +1,7 @@
 'use strict';
 
+const { OrderLogTypes } = require('../../../dist/types/enums');
+
 module.exports = {
   async up(queryInterface, { DataTypes }) {
     await queryInterface.createTable('OrderLogs', {
@@ -12,6 +14,10 @@ module.exports = {
       csComission: {
         allowNull: false,
         type: DataTypes.DOUBLE,
+      },
+      orderLogType: {
+        allowNull: false,
+        type: DataTypes.ENUM(...Object.values(OrderLogTypes)),
       },
       orderId: {
         allowNull: false,

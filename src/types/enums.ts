@@ -24,26 +24,46 @@ export enum DayOfWeek {
 }
 
 export enum CuisineTypes {
-  DEFAULT = '0',
-  //todo: fill here
+  ITALIAN = '0',
+  MEXICAN = '1',
+  CHINESE = '2',
+  JAPANESE = '3',
+  INDIAN = '4',
+  AMERICAN = '5',
+  FRENCH = '6',
+  SPANISH = '7',
+  KOREAN = '8',
+  TURKISH = '9',
 }
 
 export enum ProductTypes {
-  DEFAULT = '0',
-  //todo: fill here
+  PIZZA = '0',
+  BURGER = '1',
+  SANDWICH = '2',
+  PASTA = '3',
+  SALAD = '4',
+  SUSHI = '5',
 }
 
 export enum OrderStatusTypes {
-  DEFAULT = '0',
-  //todo: fill here
+  PENDING = '0',
+  CONFIRMED = '1',
+  DELIVERED = '2',
+  CANCELLED = '3',
+  COMPLETED = '4',
 }
 
 export enum DeliveryTypes {
-  DEFAULT = '0',
-  //todo: fill here
+  PICKUP = '0',
+  DELIVERY = '1',
+  TAKEOUT = '2',
 }
 
 export enum OptionsTypes {
   DEFAULT = '0',
   //todo: fill here
+}
+
+export enum OrderLogTypes {
+  PURCHASE = '0',
 }

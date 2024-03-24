@@ -19,7 +19,6 @@ module.exports = {
       },
       dayOfWeek: {
         type: DataTypes.ENUM(...Object.values(DayOfWeek)),
-        defaultValue: DayOfWeek.MONDAY,
         allowNull: false,
       },
       openingTime: {
@@ -43,8 +42,13 @@ module.exports = {
         type: DataTypes.DATE,
       },
     });
+    await queryInterface.addIndex('BusinessHours', ['restaurantId'], {
+      name: 'businesshours_restaurant_id',
+    });
   },
   async down(queryInterface) {
+    await queryInterface.removeIndex('BusinessHours', 'businesshours_restaurant_id');
+
     await queryInterface.dropTable('BusinessHours');
   },
 };
