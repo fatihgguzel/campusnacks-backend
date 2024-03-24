@@ -1,6 +1,10 @@
 import * as ENUMS from './enums';
 import { Errors } from './Errors';
 
+export interface getConfigTypeFileParams {
+  fileName: string;
+}
+
 export interface postForgotPasswordBody {
   email: string;
 }

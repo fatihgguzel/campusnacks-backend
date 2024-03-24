@@ -1,5 +1,5 @@
 import { Strategy, ExtractJwt, VerifiedCallback } from 'passport-jwt';
-import Customer from '../../database/models/Customer';
+import User from '../../database/models/User';
 import bcrypt from 'bcrypt';
 
 const options = {
@@ -13,21 +13,21 @@ async function verify(payload: any, done: VerifiedCallback) {
     return done(null, false);
   }
 
-  const customer = await Customer.findOne({
+  const user = await User.findOne({
     where: {
       id: payload.id,
     },
   });
 
-  if (!customer) {
+  if (!user) {
     return done(null, false);
   }
 
-  if (!bcrypt.compareSync(customer.jwtSecureCode, payload.jwtSecureCode)) {
+  if (!bcrypt.compareSync(user.jwtSecureCode, payload.jwtSecureCode)) {
     return done(null, false);
   }
 
-  done(null, customer as Express.User);
+  done(null, user as Express.User);
 }
 
 export default new Strategy(options, verify);

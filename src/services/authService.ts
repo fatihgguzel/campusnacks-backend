@@ -1,7 +1,7 @@
-import Customer from '../database/models/Customer';
+import User from '../database/models/User';
 import { AppError } from '../errors/AppError';
 import { Errors } from '../types/Errors';
-import * as CustomerService from './customerService';
+import * as UserService from './userService';
 import * as Helpers from '../helpers';
 import bcrypt from 'bcrypt';
 import * as Enums from '../types/enums';
@@ -10,30 +10,30 @@ import PasswordResetRequest from '../database/models/PasswordResetRequest';
 import { shortCodeGenerator } from '../helpers';
 import moment from 'moment';
 
-interface IRegisterCustomerOptions {
+interface IRegisterUserOptions {
   email: string;
   fullName: string;
   phoneNumber: string;
-  role: Enums.CustomerRoleTypes;
-  provider: Enums.CustomerProviders;
+  role: Enums.UserRoleTypes;
+  provider: Enums.UserProviders;
   password: string;
   jwtSecureCode?: string;
   city: string;
   district: string;
   address: string;
 }
-export async function registerCustomer(options: IRegisterCustomerOptions) {
-  const existingCustomer = await Customer.findOne({
+export async function registerUser(options: IRegisterUserOptions) {
+  const existingUser = await User.findOne({
     where: {
       email: options.email,
     },
   });
 
-  if (existingCustomer) {
-    throw new AppError(Errors.CUSTOMER_EXIST, 400);
+  if (existingUser) {
+    throw new AppError(Errors.USER_EXIST, 400);
   }
 
-  const customer = await CustomerService.createCustomer({
+  const user = await UserService.createUser({
     email: options.email,
     fullName: options.fullName,
     phoneNumber: options.phoneNumber,
@@ -46,61 +46,71 @@ export async function registerCustomer(options: IRegisterCustomerOptions) {
     address: options.address,
   });
 
-  if (options.provider === Enums.CustomerProviders.CAMPUSNACKS) {
+  if (options.provider === Enums.UserProviders.CAMPUSNACKS) {
     // TODO send verification email
   }
 
   const authToken = Helpers.jwtGenerator({
-    id: customer.id,
-    jwtSecureCode: bcrypt.hashSync(customer.jwtSecureCode, bcrypt.genSaltSync(10)),
+    id: user.id,
+    jwtSecureCode: bcrypt.hashSync(user.jwtSecureCode, bcrypt.genSaltSync(10)),
   });
 
   return {
     authToken,
-    customer,
+    user: user,
   };
 }
 
-interface ILoginCustomerOptions {
+interface ILoginUserOptions {
   email: string;
   password: string;
 }
-export async function loginCustomer(options: ILoginCustomerOptions) {
-  const customer = await Customer.findOne({ where: { email: options.email } });
+export async function loginUser(options: ILoginUserOptions) {
+  const user = await User.findOne({
+    where: {
+      email: options.email,
+    },
+  });
 
-  if (!customer) {
+  if (!user) {
     throw new AppError(Errors.INVALID_CREDENTIALS, 400);
   }
 
-  if (customer.provider !== Enums.CustomerProviders.CAMPUSNACKS) {
+  if (user.provider !== Enums.UserProviders.CAMPUSNACKS) {
     throw new AppError(Errors.USE_GOOGLE_LOGIN, 400);
   }
 
-  const isPasswordMatch = await bcrypt.compare(options.password, customer.hashPassword!);
+  const isPasswordMatch = await bcrypt.compare(options.password, user.hashPassword!);
 
   if (!isPasswordMatch) {
     throw new AppError(Errors.INVALID_CREDENTIALS, 400);
   }
 
   const authToken = Helpers.jwtGenerator({
-    id: customer.id,
-    jwtSecureCode: bcrypt.hashSync(customer.jwtSecureCode, bcrypt.genSaltSync(10)),
+    id: user.id,
+    jwtSecureCode: bcrypt.hashSync(user.jwtSecureCode, bcrypt.genSaltSync(10)),
   });
 
-  return { authToken };
+  return {
+    authToken,
+  };
 }
 
 interface IForgotPasswordOptions {
   email: string;
 }
 export async function forgotPassword(options: IForgotPasswordOptions) {
-  const customer = await Customer.findOne({ where: { email: options.email } });
+  const user = await User.findOne({
+    where: {
+      email: options.email,
+    },
+  });
 
-  if (!customer) {
-    throw new AppError(Errors.CUSTOMER_NOT_FOUND, 404);
+  if (!user) {
+    throw new AppError(Errors.USER_NOT_FOUND, 404);
   }
 
-  if (customer.provider !== Enums.CustomerProviders.CAMPUSNACKS) {
+  if (user.provider !== Enums.UserProviders.CAMPUSNACKS) {
     throw new AppError(Errors.INCORRECT_PROVIDER, 400);
   }
 
@@ -109,7 +119,7 @@ export async function forgotPassword(options: IForgotPasswordOptions) {
 
   const existingRequest = await PasswordResetRequest.findOne({
     where: {
-      customerId: customer.id,
+      userId: user.id,
       state: Enums.PasswordResetRequestStates.PENDING,
     },
     include: [
@@ -140,14 +150,14 @@ export async function forgotPassword(options: IForgotPasswordOptions) {
     shortCodeValue = passwordResetShortCode.value;
 
     passwordResetRequest = await PasswordResetRequest.create({
-      customerId: customer.id,
+      userId: user.id,
       passwordResetShortCodeId: passwordResetShortCode.id,
       state: Enums.PasswordResetRequestStates.PENDING,
       expireDate: moment().add(3, 'hours'),
     });
   }
 
-  //TODO send email to customer with shortcode
+  //TODO send email to user with shortcode
   return shortCodeValue;
 }
 
@@ -157,15 +167,19 @@ interface IResetPasswordOptions {
   newPassword: string;
 }
 export async function resetPassword(options: IResetPasswordOptions) {
-  const customer = await Customer.findOne({ where: { email: options.email } });
+  const user = await User.findOne({
+    where: {
+      email: options.email,
+    },
+  });
 
-  if (!customer) {
-    throw new AppError(Errors.CUSTOMER_NOT_FOUND, 404);
+  if (!user) {
+    throw new AppError(Errors.USER_NOT_FOUND, 404);
   }
 
   const existingRequest = await PasswordResetRequest.findOne({
     where: {
-      customerId: customer.id,
+      userId: user.id,
       state: Enums.PasswordResetRequestStates.PENDING,
     },
     include: [
@@ -188,7 +202,7 @@ export async function resetPassword(options: IResetPasswordOptions) {
     throw new AppError(Errors.REQUEST_NOT_FOUND_OR_EXPIRED, 404);
   }
 
-  await customer.update({ hashPassword: bcrypt.hashSync(options.newPassword, bcrypt.genSaltSync(10)) });
+  await user.update({ hashPassword: bcrypt.hashSync(options.newPassword, bcrypt.genSaltSync(10)) });
 
   await existingRequest.update({ state: Enums.PasswordResetRequestStates.COMPLETED });
 }

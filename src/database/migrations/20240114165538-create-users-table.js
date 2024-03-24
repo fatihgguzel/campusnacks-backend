@@ -1,10 +1,10 @@
 'use strict';
 
-const { CustomerRoleTypes, CustomerProviders } = require('../../../dist/types/enums');
+const { UserRoleTypes, UserProviders } = require('../../../dist/types/enums');
 
 module.exports = {
   up: async (queryInterface, { DataTypes, UUIDV4 }) => {
-    await queryInterface.createTable('Customers', {
+    await queryInterface.createTable('Users', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -41,13 +41,13 @@ module.exports = {
         allowNull: false,
       },
       role: {
-        type: DataTypes.ENUM(...Object.values(CustomerRoleTypes)),
-        defaultValue: CustomerRoleTypes.DEFAULT,
+        type: DataTypes.ENUM(...Object.values(UserRoleTypes)),
+        defaultValue: UserRoleTypes.DEFAULT,
         allowNull: false,
       },
       provider: {
-        type: DataTypes.ENUM(...Object.values(CustomerProviders)),
-        defaultValue: CustomerProviders.CAMPUSNACKS,
+        type: DataTypes.ENUM(...Object.values(UserProviders)),
+        defaultValue: UserProviders.CAMPUSNACKS,
         allowNull: false,
       },
       hashPassword: {
@@ -79,6 +79,6 @@ module.exports = {
     });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Customers');
+    await queryInterface.dropTable('Users');
   },
 };

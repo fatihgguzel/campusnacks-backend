@@ -36,7 +36,7 @@ export const swAuthRouter = {
   },
   '/api/auth/register': {
     post: {
-      summary: 'Register customer',
+      summary: 'Register user',
       tags: ['Auth'],
       requestBody: {
         content: {
@@ -56,7 +56,7 @@ export const swAuthRouter = {
       },
     },
   },
-  '/api/auth/forgot-password': {
+  '/api/auth/password/email': {
     post: {
       summary: 'Send password reset link to email',
       tags: ['Auth'],
@@ -78,9 +78,9 @@ export const swAuthRouter = {
       },
     },
   },
-  'api/auth/reset-password': {
+  'api/auth/password/reset': {
     post: {
-      summary: 'Update password of customer',
+      summary: 'Update password of user',
       tags: ['Auth'],
       requestBody: {
         content: {
@@ -102,55 +102,67 @@ export const swAuthRouter = {
   },
 };
 
-router.post('/register', validate({ body: RequestObjects.postRegisterBody }), async (req: Request, res: Response) => {
-  try {
-    const body = req.body as RequestObjectsTypes.postRegisterBody;
+router.post(
+  '/register',
+  validate({
+    body: RequestObjects.postRegisterBody,
+  }),
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body as RequestObjectsTypes.postRegisterBody;
 
-    const { authToken } = await AuthService.registerCustomer({
-      email: body.email,
-      fullName: body.fullName,
-      phoneNumber: body.phoneNumber,
-      role: Enums.CustomerRoleTypes.DEFAULT,
-      provider: Enums.CustomerProviders.CAMPUSNACKS,
-      password: body.password,
-      city: body.city,
-      district: body.district,
-      address: body.address,
-    });
+      const { authToken } = await AuthService.registerUser({
+        email: body.email,
+        fullName: body.fullName,
+        phoneNumber: body.phoneNumber,
+        role: Enums.UserRoleTypes.DEFAULT,
+        provider: Enums.UserProviders.CAMPUSNACKS,
+        password: body.password,
+        city: body.city,
+        district: body.district,
+        address: body.address,
+      });
 
-    Helpers.response(res, {
-      data: {
-        authToken,
-      },
-      message: 'Successfully registered',
-    });
-  } catch (err) {
-    Helpers.error(res, err);
-  }
-});
-
-router.post('/login', validate({ body: RequestObjects.postLoginBody }), async (req: Request, res: Response) => {
-  try {
-    const body = req.body as RequestObjectsTypes.postLoginBody;
-
-    const { authToken } = await AuthService.loginCustomer({
-      email: body.email,
-      password: body.password,
-    });
-
-    Helpers.response(res, {
-      data: {
-        authToken,
-      },
-      message: 'Successfully logged in',
-    });
-  } catch (err) {
-    Helpers.error(res, err);
-  }
-});
+      Helpers.response(res, {
+        data: {
+          authToken,
+        },
+        message: 'Successfully registered',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
 
 router.post(
-  '/forgot-password',
+  '/login',
+  validate({
+    body: RequestObjects.postLoginBody,
+  }),
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body as RequestObjectsTypes.postLoginBody;
+
+      const { authToken } = await AuthService.loginUser({
+        email: body.email,
+        password: body.password,
+      });
+
+      Helpers.response(res, {
+        data: {
+          authToken,
+        },
+        message: 'Successfully logged in',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.post(
+  '/password/email',
   validate({ body: RequestObjects.postForgotPasswordBody }),
   async (req: Request, res: Response) => {
     try {
@@ -168,7 +180,7 @@ router.post(
 );
 
 router.post(
-  '/reset-password',
+  '/password/reset',
   validate({ body: RequestObjects.postResetPasswordBody }),
   async (req: Request, res: Response) => {
     try {

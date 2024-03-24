@@ -16,7 +16,7 @@ import { response, error } from './helpers';
 import { swaggerDoc } from './swagger.def';
 import {} from './routes';
 // import { requireJwt } from './middlewares/requireAuth';
-import { authRoute } from './routes';
+import { authRoute, configRoute } from './routes';
 
 sequelize
   .authenticate()
@@ -64,6 +64,7 @@ app.get('/api', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', authRoute);
+app.use('/api/config', configRoute);
 
 app.all('*', (req: Request, res: Response) => {
   response(res, {

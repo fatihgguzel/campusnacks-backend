@@ -3,11 +3,11 @@ import sequelize from '../sequelize';
 import * as Enums from '../../types/enums';
 import ShortCode from './ShortCode';
 import BaseModel from './BaseModel';
-import Customer from './Customer';
+import User from './User';
 
 class PasswordResetRequest extends BaseModel {
   public id!: number;
-  public customerId!: number;
+  public userId!: number;
   public passwordResetShortCodeId!: number;
   public state!: string;
   public expireDate!: Date;
@@ -15,12 +15,12 @@ class PasswordResetRequest extends BaseModel {
   public readonly passwordResetShortCode?: ShortCode | null;
   public getpasswordResetShortCode!: BelongsToGetAssociationMixin<ShortCode>;
 
-  public readonly customer?: Customer | null;
-  public getCustomer!: BelongsToGetAssociationMixin<Customer>;
+  public readonly user?: User | null;
+  public getUser!: BelongsToGetAssociationMixin<User>;
 
   public static associations: {
     passwordResetShortCode: Association<PasswordResetRequest, ShortCode>;
-    customer: Association<PasswordResetRequest, Customer>;
+    user: Association<PasswordResetRequest, User>;
   };
 }
 
@@ -33,10 +33,10 @@ PasswordResetRequest.init(
       autoIncrement: true,
       allowNull: false,
     },
-    customerId: {
+    userId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Customer,
+        model: User,
       },
       allowNull: false,
     },

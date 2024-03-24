@@ -1,5 +1,6 @@
 import * as genericJoi from './joiGeneric';
 
+// Body types
 export const postLoginBody = genericJoi
   .obj({
     email: genericJoi.email.required(),
@@ -20,6 +21,15 @@ export const postRegisterBody = genericJoi
   })
   .required()
   .label('postRegisterBody');
+
+// Param Types
+
+export const getConfigTypeFileParams = genericJoi
+  .obj({
+    fileName: genericJoi.stringTrimmed.required(),
+  })
+  .required()
+  .label('getConfigTypeFileParams');
 
 export const postForgotPasswordBody = genericJoi
   .obj({

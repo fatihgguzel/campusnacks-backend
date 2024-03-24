@@ -12,10 +12,10 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      customerId: {
+      userId: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'Customers',
+          model: 'Users',
           key: 'id',
         },
         allowNull: false,
@@ -52,12 +52,12 @@ module.exports = {
       },
     });
 
-    await queryInterface.addIndex('PasswordResetRequests', ['customerId'], {
-      name: 'passwordresetrequest_customerid',
+    await queryInterface.addIndex('PasswordResetRequests', ['userId'], {
+      name: 'passwordresetrequest_userid',
     });
   },
   down: async (queryInterface) => {
-    await queryInterface.removeIndex('PasswordResetRequests', 'passwordresetrequest_customerid');
+    await queryInterface.removeIndex('PasswordResetRequests', 'passwordresetrequest_userid');
 
     await queryInterface.dropTable('PasswordResetRequests');
   },
