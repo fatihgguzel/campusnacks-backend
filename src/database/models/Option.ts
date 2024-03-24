@@ -9,7 +9,8 @@ class Option extends BaseModel {
   public id!: number;
   public optionsType!: string;
   public data!: JSON;
-  public readonly item!: Item;
+
+  public readonly item?: Item;
   public getItem!: BelongsToGetAssociationMixin<Item>;
 
   public static associations: {
