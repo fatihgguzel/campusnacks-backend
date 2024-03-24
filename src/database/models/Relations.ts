@@ -159,7 +159,7 @@ Item.hasMany(OrderItem, {
 
 Option.hasOne(Item, {
   as: 'item',
-  foreignKey: 'optiondId',
+  foreignKey: 'optionId',
 });
 
 Cuisine.hasOne(Item, {
