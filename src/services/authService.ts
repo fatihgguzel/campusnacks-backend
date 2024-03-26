@@ -206,3 +206,16 @@ export async function resetPassword(options: IResetPasswordOptions) {
 
   await existingRequest.update({ state: Enums.PasswordResetRequestStates.COMPLETED });
 }
+
+interface IRefreshTokenOptions {
+  userId: number;
+  secureCode: string;
+}
+export function refreshToken(options: IRefreshTokenOptions) {
+  const authToken = Helpers.jwtGenerator({
+    id: options.userId,
+    jwtSecureCode: options.secureCode,
+  });
+
+  return authToken;
+}

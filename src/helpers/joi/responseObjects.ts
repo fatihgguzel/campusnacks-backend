@@ -80,3 +80,13 @@ export const postBusinessHoursResponse = genericJoi
   })
   .required()
   .label('postBusinessHoursResponse');
+
+export const getRefreshTokenResponse = genericJoi
+  .obj({
+    ...defaultResponse,
+    data: genericJoi.obj({
+      authToken: genericJoi.stringTrimmed,
+    }),
+  })
+  .required()
+  .label('getRefreshTokenResponse');

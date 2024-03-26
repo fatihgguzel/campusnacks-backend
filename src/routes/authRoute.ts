@@ -7,6 +7,8 @@ import * as Enums from '../types/enums';
 import j2s from 'joi-to-swagger';
 import * as Helpers from '../helpers';
 import { AuthService } from '../services';
+import * as RequireAuth from '../middlewares/requireAuth';
+import User from '../database/models/User';
 
 const router = Router();
 
@@ -78,7 +80,7 @@ export const swAuthRouter = {
       },
     },
   },
-  'api/auth/password/reset': {
+  '/api/auth/password/reset': {
     post: {
       summary: 'Update password of user',
       tags: ['Auth'],
@@ -94,6 +96,22 @@ export const swAuthRouter = {
           content: {
             'application/json': {
               schema: j2s(ResponseObjects.postResetPasswordResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
+  '/api/auth/refresh': {
+    get: {
+      summary: 'Refresh user token',
+      tags: ['Auth'],
+      security: [{ bearerAuth: [] }],
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.getRefreshTokenResponse).swagger,
             },
           },
         },
@@ -198,5 +216,23 @@ router.post(
     }
   },
 );
+
+router.get('/refresh', RequireAuth.requireJwt, async (req: Request, res: Response) => {
+  try {
+    const user = req.user as User;
+
+    Helpers.response(res, {
+      message: '',
+      data: {
+        authToken: AuthService.refreshToken({
+          userId: user.id,
+          secureCode: user.jwtSecureCode,
+        }),
+      },
+    });
+  } catch (err) {
+    Helpers.error(res, err);
+  }
+});
 
 export default router;
