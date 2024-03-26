@@ -1,6 +1,7 @@
 import { RestaurantService } from '.';
 import Restaurant from '../database/models/Restaurant';
 import { AppError } from '../errors/AppError';
+import { Logger } from '../helpers';
 import { Errors } from '../types/Errors';
 import { createAdminRestaurantBody } from '../types/requestObjects';
 
@@ -12,7 +13,14 @@ export async function createRestaurant(options: ICreateRestaurantOptions) {
   if (existingRestaurantEmail) {
     throw new AppError(Errors.RESTAURANT_EXIST, 400);
   }
-
+  Logger.log({
+    service: 'Admin Service',
+    function: 'createRestaurant',
+    message: 'restaurant added',
+    data: {
+      ...options,
+    },
+  });
   await RestaurantService.createRestaurant({ ...options });
 }
 
