@@ -79,6 +79,34 @@ export const createAdminRestaurantBody = genericJoi
   .required()
   .label('createAdminRestaurantBody');
 
+export const updateRestaurantBody = genericJoi
+  .obj({
+    name: genericJoi.stringTrimmed.optional(),
+    phone: genericJoi.stringTrimmed.optional(),
+    email: genericJoi.email.optional(),
+    imageUrl: genericJoi.stringTrimmed.optional(),
+    hasDelivery: genericJoi.boolean.optional(),
+    deliveryPrice: genericJoi.num.optional(),
+    minimumPrice: genericJoi.num.optional(),
+    deliveryTime: genericJoi.num.optional(),
+    isBusy: genericJoi.boolean.optional(),
+    city: genericJoi.stringTrimmed.optional(),
+    district: genericJoi.stringTrimmed.optional(),
+    address: genericJoi.stringTrimmed.optional(),
+    nHood: genericJoi.stringTrimmed.optional(),
+    street: genericJoi.stringTrimmed.optional(),
+    no: genericJoi.num.optional(),
+  })
+  .required()
+  .label('updateRestaurantBody');
+
+export const updateRestaurantParams = genericJoi
+  .obj({
+    restaurantId: genericJoi.num.required(),
+  })
+  .required()
+  .label('updateRestaurantParams');
+
 export const deleteAdminRestaurantParams = genericJoi
   .obj({
     restaurantId: genericJoi.num.required(),

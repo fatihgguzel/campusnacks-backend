@@ -2,33 +2,14 @@ import { RestaurantService } from '.';
 import Restaurant from '../database/models/Restaurant';
 import { AppError } from '../errors/AppError';
 import { Errors } from '../types/Errors';
+import { createAdminRestaurantBody } from '../types/requestObjects';
 
-interface ICreateRestaurantOptions {
-  name: string;
-  phone: string;
-  email: string;
-  imageUrl?: string | null;
-  hasDelivery: boolean;
-  deliveryPrice?: number | null;
-  minimumPrice: number;
-  deliveryTime: number;
-  isBusy: boolean;
-  city: string;
-  district: string;
-  address: string;
-  nHood?: string | null;
-  street: string;
-  no: number;
-}
+interface ICreateRestaurantOptions extends createAdminRestaurantBody {}
 
 export async function createRestaurant(options: ICreateRestaurantOptions) {
-  const existingRestaurant = await Restaurant.findOne({
-    where: {
-      email: options.email,
-    },
-  });
+  const existingRestaurantEmail = await RestaurantService.isExistEmail(options.email);
 
-  if (existingRestaurant) {
+  if (existingRestaurantEmail) {
     throw new AppError(Errors.RESTAURANT_EXIST, 400);
   }
 

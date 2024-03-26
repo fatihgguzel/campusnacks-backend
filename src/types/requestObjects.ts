@@ -62,3 +62,25 @@ export interface postResetPasswordBody {
   shortCode: string;
   newPassword: string;
 }
+
+export interface updateRestaurantBody {
+  name?: string;
+  phone?: string;
+  email?: string;
+  imageUrl?: string;
+  hasDelivery?: boolean;
+  deliveryPrice?: number;
+  minimumPrice?: number;
+  deliveryTime?: number;
+  isBusy?: boolean;
+  city?: string;
+  district?: string;
+  address?: string;
+  nHood?: string;
+  street?: string;
+  no?: number;
+}
+
+export interface updateRestaurantParams {
+  restaurantId: number;
+}

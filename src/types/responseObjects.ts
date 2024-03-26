@@ -52,3 +52,9 @@ export interface postResetPasswordResponse {
   message: string | Errors;
   code: number;
 }
+
+export interface updateRestaurantResponse {
+  data: Record<string, never> | null;
+  message: string | Errors;
+  code: number;
+}

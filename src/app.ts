@@ -66,7 +66,7 @@ app.get('/api', (req: Request, res: Response) => {
 app.use('/api/auth', authRoute);
 app.use('/api/config', configRoute);
 app.use('/api/admin', adminRoute);
-app.use('api/restaurant', restaurantRoute);
+app.use('/api/restaurant', restaurantRoute);
 
 app.all('*', (req: Request, res: Response) => {
   response(res, {
