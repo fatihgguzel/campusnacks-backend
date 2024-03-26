@@ -67,9 +67,9 @@ export interface updateRestaurantBody {
   name?: string;
   phone?: string;
   email?: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   hasDelivery?: boolean;
-  deliveryPrice?: number;
+  deliveryPrice?: number | null;
   minimumPrice?: number;
   deliveryTime?: number;
   isBusy?: boolean;

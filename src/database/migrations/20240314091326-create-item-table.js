@@ -68,8 +68,14 @@ module.exports = {
         type: DataTypes.DATE,
       },
     });
+
+    await queryInterface.addIndex('Items', ['restaurantId'], {
+      name: 'items_restaurantId',
+    });
   },
   async down(queryInterface) {
+    await queryInterface.removeIndex('Items', 'items_restaurantId');
+
     await queryInterface.dropTable('Items');
   },
 };
