@@ -58,6 +58,27 @@ export const getConfigTypeFileParams = genericJoi
   .required()
   .label('getConfigTypeFileParams');
 
+export const createAdminRestaurantBody = genericJoi
+  .obj({
+    name: genericJoi.stringTrimmed.required(),
+    phone: genericJoi.stringTrimmed.required(),
+    email: genericJoi.email.required(),
+    imageUrl: genericJoi.stringTrimmed.optional(),
+    hasDelivery: genericJoi.boolean.required(),
+    deliveryPrice: genericJoi.num.optional(),
+    minimumPrice: genericJoi.num.required(),
+    deliveryTime: genericJoi.num.required(),
+    isBusy: genericJoi.boolean.required(),
+    city: genericJoi.stringTrimmed.required(),
+    district: genericJoi.stringTrimmed.required(),
+    address: genericJoi.stringTrimmed.required(),
+    nHood: genericJoi.stringTrimmed.optional(),
+    street: genericJoi.stringTrimmed.required(),
+    no: genericJoi.num.required(),
+  })
+  .required()
+  .label('createAdminRestaurantBody');
+
 export const deleteAdminRestaurantParams = genericJoi
   .obj({
     restaurantId: genericJoi.num.required(),

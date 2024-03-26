@@ -1,6 +1,24 @@
 import * as ENUMS from './enums';
 import { Errors } from './Errors';
 
+export interface createAdminRestaurantBody {
+  name: string;
+  phone: string;
+  email: string;
+  imageUrl?: string;
+  hasDelivery: boolean;
+  deliveryPrice?: number;
+  minimumPrice: number;
+  deliveryTime: number;
+  isBusy: boolean;
+  city: string;
+  district: string;
+  address: string;
+  nHood?: string;
+  street: string;
+  no: number;
+}
+
 export interface deleteAdminRestaurantParams {
   restaurantId: number;
 }

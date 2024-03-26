@@ -10,6 +10,28 @@ import { AdminService } from '../services';
 const router = Router();
 
 export const swAdminRouter = {
+  '/api/admin/restaurant': {
+    post: {
+      summary: 'Create restaurant with given values',
+      tags: ['Admin'],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: j2s(RequestObjects.createAdminRestaurantBody).swagger,
+          },
+        },
+      },
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.createAdminRestaurantResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
   '/api/admin/restaurant/{restaurantId}': {
     delete: {
       summary: 'Delete restaurant with given id',
@@ -36,6 +58,42 @@ export const swAdminRouter = {
     },
   },
 };
+
+router.post(
+  '/restaurant',
+  validate({
+    body: RequestObjects.createAdminRestaurantBody,
+  }),
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body as unknown as RequestObjectTypes.createAdminRestaurantBody;
+
+      await AdminService.createRestaurant({
+        name: body.name,
+        phone: body.phone,
+        email: body.email,
+        address: body.address,
+        imageUrl: body.imageUrl,
+        hasDelivery: body.hasDelivery,
+        deliveryPrice: body.deliveryPrice,
+        minimumPrice: body.minimumPrice,
+        deliveryTime: body.deliveryTime,
+        isBusy: body.isBusy,
+        city: body.city,
+        district: body.district,
+        nHood: body.nHood,
+        no: body.no,
+        street: body.street,
+      });
+
+      Helpers.response(res, {
+        message: 'Restaurant is created successfully',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
 
 router.delete(
   '/restaurant/:restaurantId',
