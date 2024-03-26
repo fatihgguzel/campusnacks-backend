@@ -1,3 +1,4 @@
+import { swAdminRouter } from './routes/adminRoute';
 import { swAuthRouter } from './routes/authRoute';
 import { swConfigRouter } from './routes/configRoute';
 
@@ -11,6 +12,7 @@ const swaggerDoc = {
   paths: {
     ...swAuthRouter,
     ...swConfigRouter,
+    ...swAdminRouter,
   },
   components: {
     securitySchemes: {

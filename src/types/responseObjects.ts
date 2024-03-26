@@ -7,6 +7,12 @@ export interface defaultResponseSchema {
   code: number;
 }
 
+export interface deleteAdminRestaurantResponse {
+  data: Record<string, never> | null;
+  message: string | Errors;
+  code: number;
+}
+
 export interface postForgotPasswordResponse {
   data: Record<string, never> | null;
   message: string | Errors;

@@ -52,3 +52,10 @@ export const postResetPasswordResponse = genericJoi
   })
   .required()
   .label('postResetPasswordResponse');
+
+export const deleteAdminRestaurantResponse = genericJoi
+  .obj({
+    ...defaultResponse,
+  })
+  .required()
+  .label('deleteAdminRestaurantResponse');

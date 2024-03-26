@@ -22,15 +22,6 @@ export const postRegisterBody = genericJoi
   .required()
   .label('postRegisterBody');
 
-// Param Types
-
-export const getConfigTypeFileParams = genericJoi
-  .obj({
-    fileName: genericJoi.stringTrimmed.required(),
-  })
-  .required()
-  .label('getConfigTypeFileParams');
-
 export const postForgotPasswordBody = genericJoi
   .obj({
     email: genericJoi.email.required(),
@@ -46,3 +37,19 @@ export const postResetPasswordBody = genericJoi
   })
   .required()
   .label('postResetPasswordBody');
+
+// Param Types
+
+export const getConfigTypeFileParams = genericJoi
+  .obj({
+    fileName: genericJoi.stringTrimmed.required(),
+  })
+  .required()
+  .label('getConfigTypeFileParams');
+
+export const deleteAdminRestaurantParams = genericJoi
+  .obj({
+    restaurantId: genericJoi.num.required(),
+  })
+  .required()
+  .label('deleteAdminRestaurantParams');

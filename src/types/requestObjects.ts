@@ -1,6 +1,10 @@
 import * as ENUMS from './enums';
 import { Errors } from './Errors';
 
+export interface deleteAdminRestaurantParams {
+  restaurantId: number;
+}
+
 export interface getConfigTypeFileParams {
   fileName: string;
 }
