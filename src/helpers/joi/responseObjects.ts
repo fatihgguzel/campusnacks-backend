@@ -52,3 +52,13 @@ export const postResetPasswordResponse = genericJoi
   })
   .required()
   .label('postResetPasswordResponse');
+
+export const getRefreshTokenResponse = genericJoi
+  .obj({
+    ...defaultResponse,
+    data: genericJoi.obj({
+      authToken: genericJoi.stringTrimmed,
+    }),
+  })
+  .required()
+  .label('getRefreshTokenResponse');
