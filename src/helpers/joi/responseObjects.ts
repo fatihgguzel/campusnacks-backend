@@ -59,3 +59,10 @@ export const deleteAdminRestaurantResponse = genericJoi
   })
   .required()
   .label('deleteAdminRestaurantResponse');
+
+export const postBusinessHoursResponse = genericJoi
+  .obj({
+    ...defaultResponse,
+  })
+  .required()
+  .label('postBusinessHoursResponse');

@@ -16,7 +16,7 @@ import { response, error } from './helpers';
 import { swaggerDoc } from './swagger.def';
 import {} from './routes';
 // import { requireJwt } from './middlewares/requireAuth';
-import { authRoute, configRoute, adminRoute } from './routes';
+import { authRoute, configRoute, adminRoute, restaurantRoute } from './routes';
 
 sequelize
   .authenticate()
@@ -66,6 +66,7 @@ app.get('/api', (req: Request, res: Response) => {
 app.use('/api/auth', authRoute);
 app.use('/api/config', configRoute);
 app.use('/api/admin', adminRoute);
+app.use('api/restaurant', restaurantRoute);
 
 app.all('*', (req: Request, res: Response) => {
   response(res, {

@@ -9,6 +9,17 @@ export interface getConfigTypeFileParams {
   fileName: string;
 }
 
+export interface postBusinessHoursBody {
+  restaurantId: number;
+  monday: any;
+  tuesday: any;
+  wednesday: any;
+  thursday: any;
+  friday: any;
+  saturday: any;
+  sunday: any;
+}
+
 export interface postForgotPasswordBody {
   email: string;
 }

@@ -38,6 +38,17 @@ export const postResetPasswordBody = genericJoi
   .required()
   .label('postResetPasswordBody');
 
+export const postBusinessHoursBody = genericJoi.obj({
+  restaurantId: genericJoi.num.required(),
+  monday: genericJoi.objNullable,
+  tuesday: genericJoi.objNullable,
+  wednesday: genericJoi.objNullable,
+  thursday: genericJoi.objNullable,
+  friday: genericJoi.objNullable,
+  saturday: genericJoi.objNullable,
+  sunday: genericJoi.objNullable,
+});
+
 // Param Types
 
 export const getConfigTypeFileParams = genericJoi

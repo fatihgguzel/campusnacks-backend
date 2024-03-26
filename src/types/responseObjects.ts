@@ -13,6 +13,12 @@ export interface deleteAdminRestaurantResponse {
   code: number;
 }
 
+export interface postBusinessHoursResponse {
+  data: Record<string, never> | null;
+  message: string | Errors;
+  code: number;
+}
+
 export interface postForgotPasswordResponse {
   data: Record<string, never> | null;
   message: string | Errors;
