@@ -12,6 +12,8 @@ export const password = stringTrimmed.min(6).messages({
   'string.min': Errors.VALIDATION_PASSWORD_LENGTH,
 });
 
+export const boolean = Joi.boolean();
+
 // NUMBERS
 export const num = Joi.number();
 

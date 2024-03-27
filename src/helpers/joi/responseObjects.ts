@@ -39,20 +39,6 @@ export const postRegisterResponse = genericJoi
   .required()
   .label('postRegisterResponse');
 
-export const postForgotPasswordResponse = genericJoi
-  .obj({
-    ...defaultResponse,
-  })
-  .required()
-  .label('postForgotPasswordResponse');
-
-export const postResetPasswordResponse = genericJoi
-  .obj({
-    ...defaultResponse,
-  })
-  .required()
-  .label('postResetPasswordResponse');
-
 export const getRefreshTokenResponse = genericJoi
   .obj({
     ...defaultResponse,

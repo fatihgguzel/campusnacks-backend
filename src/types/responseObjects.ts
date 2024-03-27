@@ -15,12 +15,6 @@ export interface getRefreshTokenResponse {
   code: number;
 }
 
-export interface postForgotPasswordResponse {
-  data: Record<string, never> | null;
-  message: string | Errors;
-  code: number;
-}
-
 export interface postLoginResponse {
   data: {
     authToken: string;
@@ -33,12 +27,6 @@ export interface postRegisterResponse {
   data: {
     authToken: string;
   };
-  message: string | Errors;
-  code: number;
-}
-
-export interface postResetPasswordResponse {
-  data: Record<string, never> | null;
   message: string | Errors;
   code: number;
 }

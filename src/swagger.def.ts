@@ -1,5 +1,7 @@
+import { swAdminRouter } from './routes/adminRoute';
 import { swAuthRouter } from './routes/authRoute';
 import { swConfigRouter } from './routes/configRoute';
+import { swRestaurantRouter } from './routes/restaurantRoute';
 
 const swaggerDoc = {
   openapi: '3.0.0',
@@ -11,6 +13,8 @@ const swaggerDoc = {
   paths: {
     ...swAuthRouter,
     ...swConfigRouter,
+    ...swAdminRouter,
+    ...swRestaurantRouter,
   },
   components: {
     securitySchemes: {

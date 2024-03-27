@@ -73,7 +73,7 @@ export const swAuthRouter = {
         '200': {
           content: {
             'application/json': {
-              schema: j2s(ResponseObjects.postForgotPasswordResponse).swagger,
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
             },
           },
         },
@@ -95,7 +95,7 @@ export const swAuthRouter = {
         '200': {
           content: {
             'application/json': {
-              schema: j2s(ResponseObjects.postResetPasswordResponse).swagger,
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
             },
           },
         },

@@ -11,6 +11,8 @@ export enum UserProviders {
 export enum UserRoleTypes {
   DEFAULT = '0',
   STUDENT = '1',
+  ADMIN = '2',
+  SUPERADMIN = '3',
 }
 
 export enum DayOfWeek {
@@ -72,4 +74,9 @@ export enum PasswordResetRequestStates {
   PENDING = '0',
   COMPLETED = '1',
   EXPIRED = '2',
+}
+
+export enum AdminStates {
+  ADMIN = '0',
+  SUPERADMIN = '1',
 }
