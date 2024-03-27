@@ -3,17 +3,44 @@ import RestaurantAddress from '../database/models/RestaurantAddress';
 import sequelize from '../database/sequelize';
 import { AppError } from '../errors/AppError';
 import { Errors } from '../types/Errors';
-import { createAdminRestaurantBody, updateRestaurantBody, updateRestaurantParams } from '../types/requestObjects';
+import { toSlug, Logger } from '../helpers';
 
-export async function createBusinessHours() {}
-
-interface ICreateRestaurantOptions extends createAdminRestaurantBody {}
+interface ICreateRestaurantOptions {
+  name: string;
+  phone: string;
+  email: string;
+  imageUrl?: string;
+  city: string;
+  district: string;
+  address: string;
+  nHood: string;
+  street: string;
+  no: string;
+}
 
 export async function createRestaurant(options: ICreateRestaurantOptions) {
+  const restaurantAddress = [options.name, options.nHood, options.street, options.no].join(' ');
+  const restaurantSlug = toSlug(restaurantAddress);
+
+  const existingRestaurant = await Restaurant.findOne({
+    where: {
+      slug: restaurantSlug,
+    },
+  });
+
+  if (existingRestaurant) {
+    throw new AppError(Errors.RESTAURANT_EXIST, 400);
+  }
+
   const restaurant = await sequelize.transaction(async (transaction) => {
     const address = await RestaurantAddress.create(
       {
-        ...options,
+        city: options.city,
+        district: options.district,
+        address: options.address,
+        nHood: options.nHood,
+        street: options.street,
+        no: options.no,
       },
       {
         transaction,
@@ -21,8 +48,16 @@ export async function createRestaurant(options: ICreateRestaurantOptions) {
     );
     const restaurant = await Restaurant.create(
       {
-        ...options,
+        name: options.name,
+        phone: options.phone,
+        email: options.email,
         addressId: address.id,
+        imageUrl: options.imageUrl || null,
+        hasDelivery: true,
+        minimumPrice: 0,
+        deliveryTime: 0,
+        isBusy: false,
+        slug: restaurantSlug,
       },
       {
         transaction,
@@ -30,50 +65,55 @@ export async function createRestaurant(options: ICreateRestaurantOptions) {
     );
     return restaurant;
   });
+
+  await Logger.log({
+    service: 'restaurantService',
+    function: 'createRestaurant',
+    message: 'restaurant created',
+    data: {
+      ...options,
+    },
+  });
+
   return restaurant;
 }
 
-interface IUpdateRestaurant extends updateRestaurantBody, updateRestaurantParams {}
+interface IUpdateRestaurantOptions {
+  restaurantId: number;
+  phone?: string;
+  imageUrl?: string | null;
+  hasDelivery?: boolean;
+  deliveryPrice?: number | null;
+  minimumPrice?: number;
+  deliveryTime?: number;
+  isBusy?: boolean;
+  city?: string;
+  district?: string;
+  address?: string;
+  nHood?: string;
+  street?: string;
+  no?: string;
+}
 
-export async function updateRestaurant(options: IUpdateRestaurant) {
+export async function updateRestaurant(options: IUpdateRestaurantOptions) {
+  const existingRestaurant = await Restaurant.findOne({
+    where: {
+      id: options.restaurantId,
+    },
+  });
+
+  if (!existingRestaurant) {
+    throw new AppError(Errors.RESTAURANT_NOT_EXIST, 404);
+  }
+
   await sequelize.transaction(async (transaction) => {
-    const existingRestaurant = await Restaurant.findOne({
-      where: {
-        id: options.restaurantId,
-      },
-    });
-
-    if (!existingRestaurant) {
-      throw new AppError(Errors.RESTAURANT_NOT_EXIST, 404);
-    }
-
-    if (options.email && options.email !== existingRestaurant.email) {
-      const existingRestaurantEmail = await isExistEmail(options.email);
-      if (existingRestaurantEmail) {
-        throw new AppError(Errors.RESTAURANT_EXIST, 400);
-      }
-    }
-    await Restaurant.update(
+    await existingRestaurant.update(
       {
-        ...existingRestaurant.dataValues,
         ...options,
       },
       {
-        where: {
-          id: existingRestaurant.id,
-        },
         transaction,
       },
     );
   });
-}
-
-export async function isExistEmail(email: string) {
-  const existingRestaurant = await Restaurant.findOne({
-    where: {
-      email: email,
-    },
-  });
-
-  return existingRestaurant;
 }

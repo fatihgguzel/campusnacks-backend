@@ -1,4 +1,5 @@
 import * as genericJoi from './joiGeneric';
+import * as Enums from '../../types/enums';
 
 // Body types
 export const postLoginBody = genericJoi
@@ -38,17 +39,6 @@ export const postResetPasswordBody = genericJoi
   .required()
   .label('postResetPasswordBody');
 
-export const postBusinessHoursBody = genericJoi.obj({
-  restaurantId: genericJoi.num.required(),
-  monday: genericJoi.objNullable,
-  tuesday: genericJoi.objNullable,
-  wednesday: genericJoi.objNullable,
-  thursday: genericJoi.objNullable,
-  friday: genericJoi.objNullable,
-  saturday: genericJoi.objNullable,
-  sunday: genericJoi.objNullable,
-});
-
 // Param Types
 
 export const getConfigTypeFileParams = genericJoi
@@ -58,32 +48,25 @@ export const getConfigTypeFileParams = genericJoi
   .required()
   .label('getConfigTypeFileParams');
 
-export const createAdminRestaurantBody = genericJoi
+export const postCreateRestaurantBody = genericJoi
   .obj({
     name: genericJoi.stringTrimmed.required(),
     phone: genericJoi.stringTrimmed.required(),
     email: genericJoi.email.required(),
     imageUrl: genericJoi.stringTrimmed.optional(),
-    hasDelivery: genericJoi.boolean.required(),
-    deliveryPrice: genericJoi.num.optional(),
-    minimumPrice: genericJoi.num.required(),
-    deliveryTime: genericJoi.num.required(),
-    isBusy: genericJoi.boolean.required(),
     city: genericJoi.stringTrimmed.required(),
     district: genericJoi.stringTrimmed.required(),
     address: genericJoi.stringTrimmed.required(),
-    nHood: genericJoi.stringTrimmed.optional(),
+    nHood: genericJoi.stringTrimmed.required(),
     street: genericJoi.stringTrimmed.required(),
-    no: genericJoi.num.required(),
+    no: genericJoi.stringTrimmed.required(),
   })
   .required()
-  .label('createAdminRestaurantBody');
+  .label('postCreateRestaurantBody');
 
-export const updateRestaurantBody = genericJoi
+export const putUpdateRestaurantBody = genericJoi
   .obj({
-    name: genericJoi.stringTrimmed.optional(),
     phone: genericJoi.stringTrimmed.optional(),
-    email: genericJoi.email.optional(),
     imageUrl: genericJoi.stringTrimmed.optional().allow(null),
     hasDelivery: genericJoi.boolean.optional(),
     deliveryPrice: genericJoi.num.optional().allow(null),
@@ -95,17 +78,17 @@ export const updateRestaurantBody = genericJoi
     address: genericJoi.stringTrimmed.optional(),
     nHood: genericJoi.stringTrimmed.optional(),
     street: genericJoi.stringTrimmed.optional(),
-    no: genericJoi.num.optional(),
+    no: genericJoi.stringTrimmed.optional(),
   })
   .required()
-  .label('updateRestaurantBody');
+  .label('putUpdateRestaurantBody');
 
-export const updateRestaurantParams = genericJoi
+export const putUpdateRestaurantParams = genericJoi
   .obj({
     restaurantId: genericJoi.num.required(),
   })
   .required()
-  .label('updateRestaurantParams');
+  .label('putUpdateRestaurantParams');
 
 export const deleteAdminRestaurantParams = genericJoi
   .obj({
@@ -113,3 +96,17 @@ export const deleteAdminRestaurantParams = genericJoi
   })
   .required()
   .label('deleteAdminRestaurantParams');
+
+export const putAuthorizeAdminUserParams = genericJoi
+  .obj({
+    userId: genericJoi.num,
+  })
+  .required()
+  .label('putAuthorizeAdminUserParams');
+
+export const putAuthorizeAdminUserBody = genericJoi
+  .obj({
+    role: genericJoi.stringEnum(Enums.AdminStates, 'AdminStates').required(),
+  })
+  .required()
+  .label('putAuthorizeAdminUserBody');

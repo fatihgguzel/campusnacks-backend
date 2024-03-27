@@ -19,6 +19,7 @@ class Restaurant extends BaseModel {
   public minimumPrice!: number;
   public deliveryTime!: number;
   public isBusy!: boolean;
+  public slug!: string; //name-nHood-street-no
 
   public readonly businessHours?: BusinessHour[];
   public getBusinessHours!: BelongsToManyGetAssociationsMixin<BusinessHour>;
@@ -95,6 +96,11 @@ Restaurant.init(
     isBusy: {
       type: DataTypes.NUMBER,
       allowNull: false,
+    },
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
   },
   {

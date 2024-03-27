@@ -14,6 +14,7 @@ export const swRestaurantRouter = {
     put: {
       summary: 'Update restaurant by its id',
       tags: ['Restaurant'],
+      security: [{ bearerAuth: [] }],
       parameters: [
         {
           in: 'path',
@@ -27,7 +28,7 @@ export const swRestaurantRouter = {
       requestBody: {
         content: {
           'application/json': {
-            schema: j2s(RequestObjects.updateRestaurantBody).swagger,
+            schema: j2s(RequestObjects.putUpdateRestaurantBody).swagger,
           },
         },
       },
@@ -35,29 +36,7 @@ export const swRestaurantRouter = {
         '200': {
           content: {
             'application/json': {
-              schema: j2s(ResponseObjects.updateRestaurantResponse).swagger,
-            },
-          },
-        },
-      },
-    },
-  },
-  '/api/restaurant/business-hour': {
-    post: {
-      summary: 'Create business hour for up to 7 days',
-      tags: ['Restaurant'],
-      requestBody: {
-        content: {
-          'application/json': {
-            schema: j2s(RequestObjects.postBusinessHoursBody).swagger,
-          },
-        },
-      },
-      responses: {
-        '200': {
-          content: {
-            'application/json': {
-              schema: j2s(ResponseObjects.postBusinessHoursResponse).swagger,
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
             },
           },
         },
@@ -66,40 +45,32 @@ export const swRestaurantRouter = {
   },
 };
 
-router.post(
-  '/business-hours',
-  validate({
-    body: RequestObjects.postBusinessHoursBody,
-  }),
-  async (req: Request, res: Response) => {
-    try {
-      const body = req.body as RequestObjectsTypes.postBusinessHoursBody;
-      console.log(body);
-      await RestaurantService.createBusinessHours();
-
-      Helpers.response(res, {
-        message: 'Created business hours successfully',
-      });
-    } catch (err) {
-      Helpers.error(res, err);
-    }
-  },
-);
-
 router.put(
   '/:restaurantId',
   validate({
-    body: RequestObjects.updateRestaurantBody,
-    params: RequestObjects.updateRestaurantParams,
+    body: RequestObjects.putUpdateRestaurantBody,
+    params: RequestObjects.putUpdateRestaurantParams,
   }),
   async (req: Request, res: Response) => {
     try {
-      const body = req.body as unknown as RequestObjectsTypes.updateRestaurantBody;
-      const params = req.params as unknown as RequestObjectsTypes.updateRestaurantParams;
+      const body = req.body as RequestObjectsTypes.putUpdateRestaurantBody;
+      const params = req.params as unknown as RequestObjectsTypes.putUpdateRestaurantParams;
 
       await RestaurantService.updateRestaurant({
         restaurantId: params.restaurantId,
-        ...body,
+        phone: body.phone,
+        imageUrl: body.imageUrl,
+        hasDelivery: body.hasDelivery,
+        deliveryPrice: body.deliveryPrice,
+        minimumPrice: body.minimumPrice,
+        deliveryTime: body.deliveryTime,
+        isBusy: body.isBusy,
+        city: body.city,
+        district: body.district,
+        address: body.address,
+        nHood: body.nHood,
+        street: body.street,
+        no: body.no,
       });
 
       Helpers.response(res, {

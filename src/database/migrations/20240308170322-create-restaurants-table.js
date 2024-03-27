@@ -20,7 +20,6 @@ module.exports = {
       },
       email: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
       },
       addressId: {
@@ -50,6 +49,11 @@ module.exports = {
       },
       isBusy: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      slug: {
+        type: DataTypes.STRING,
+        unique: true,
         allowNull: false,
       },
       createdAt: {

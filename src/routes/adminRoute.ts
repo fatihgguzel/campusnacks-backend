@@ -5,7 +5,8 @@ import j2s from 'joi-to-swagger';
 import validate from '../middlewares/validator';
 import * as Helpers from '../helpers';
 import * as RequestObjectTypes from '../types/requestObjects';
-import { AdminService } from '../services';
+import { RestaurantService, AdminService } from '../services';
+import User from '../database/models/User';
 
 const router = Router();
 
@@ -14,10 +15,11 @@ export const swAdminRouter = {
     post: {
       summary: 'Create restaurant with given values',
       tags: ['Admin'],
+      security: [{ bearerAuth: [] }],
       requestBody: {
         content: {
           'application/json': {
-            schema: j2s(RequestObjects.createAdminRestaurantBody).swagger,
+            schema: j2s(RequestObjects.postCreateRestaurantBody).swagger,
           },
         },
       },
@@ -25,22 +27,30 @@ export const swAdminRouter = {
         '200': {
           content: {
             'application/json': {
-              schema: j2s(ResponseObjects.createAdminRestaurantResponse).swagger,
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
             },
           },
         },
       },
     },
   },
-  '/api/admin/restaurant/{restaurantId}': {
-    delete: {
-      summary: 'Delete restaurant with given id',
+  '/api/admin/authorize/{userId}': {
+    put: {
+      summary: 'give admin role to a user',
+      security: [{ bearerAuth: [] }],
       tags: ['Admin'],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: j2s(RequestObjects.putAuthorizeAdminUserBody).swagger,
+          },
+        },
+      },
       parameters: [
         {
           in: 'path',
-          name: 'restaurantId',
-          description: 'Id of restaurant as number',
+          name: 'userId',
+          description: 'Id of the user',
           schema: {
             type: 'number',
           },
@@ -50,7 +60,7 @@ export const swAdminRouter = {
         '200': {
           content: {
             'application/json': {
-              schema: j2s(ResponseObjects.deleteAdminRestaurantResponse).swagger,
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
             },
           },
         },
@@ -62,23 +72,21 @@ export const swAdminRouter = {
 router.post(
   '/restaurant',
   validate({
-    body: RequestObjects.createAdminRestaurantBody,
+    body: RequestObjects.postCreateRestaurantBody,
   }),
   async (req: Request, res: Response) => {
     try {
-      const body = req.body as unknown as RequestObjectTypes.createAdminRestaurantBody;
+      const user = req.user as User;
+      const body = req.body as RequestObjectTypes.postCreateRestaurantBody;
 
-      await AdminService.createRestaurant({
+      await AdminService.checkIsAdmin({ userId: user.id });
+
+      await RestaurantService.createRestaurant({
         name: body.name,
         phone: body.phone,
         email: body.email,
         address: body.address,
         imageUrl: body.imageUrl,
-        hasDelivery: body.hasDelivery,
-        deliveryPrice: body.deliveryPrice,
-        minimumPrice: body.minimumPrice,
-        deliveryTime: body.deliveryTime,
-        isBusy: body.isBusy,
         city: body.city,
         district: body.district,
         nHood: body.nHood,
@@ -95,21 +103,21 @@ router.post(
   },
 );
 
-router.delete(
-  '/restaurant/:restaurantId',
-  validate({
-    params: RequestObjects.deleteAdminRestaurantParams,
-  }),
+router.put(
+  '/authorize/:userId',
+  validate({ body: RequestObjects.putAuthorizeAdminUserBody, params: RequestObjects.putAuthorizeAdminUserParams }),
   async (req: Request, res: Response) => {
     try {
-      const params = req.params as unknown as RequestObjectTypes.deleteAdminRestaurantParams;
+      const user = req.user as User;
+      const body = req.body as RequestObjectTypes.putAuthorizeAdminUserBody;
+      const params = req.params as unknown as RequestObjectTypes.putAuthorizeAdminUserParams;
 
-      await AdminService.deleteRestaurant({
-        restaurantId: params.restaurantId,
-      });
+      console.log(user);
+
+      await AdminService.authorizeUser({ adminId: user.id, userId: params.userId, adminRole: body.role });
 
       Helpers.response(res, {
-        message: 'Restaurant is deleted successfully',
+        message: 'OK',
       });
     } catch (err) {
       Helpers.error(res, err);

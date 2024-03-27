@@ -15,7 +15,7 @@ import './database/models/Relations';
 import { response, error } from './helpers';
 import { swaggerDoc } from './swagger.def';
 import {} from './routes';
-// import { requireJwt } from './middlewares/requireAuth';
+import { requireJwt } from './middlewares/requireAuth';
 import { authRoute, configRoute, adminRoute, restaurantRoute } from './routes';
 
 sequelize
@@ -65,8 +65,8 @@ app.get('/api', (req: Request, res: Response) => {
 
 app.use('/api/auth', authRoute);
 app.use('/api/config', configRoute);
-app.use('/api/admin', adminRoute);
-app.use('/api/restaurant', restaurantRoute);
+app.use('/api/admin', requireJwt, adminRoute);
+app.use('/api/restaurant', requireJwt, restaurantRoute);
 
 app.all('*', (req: Request, res: Response) => {
   response(res, {

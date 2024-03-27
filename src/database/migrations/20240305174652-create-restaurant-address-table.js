@@ -24,14 +24,14 @@ module.exports = {
       },
       nHood: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       street: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       no: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       createdAt: {

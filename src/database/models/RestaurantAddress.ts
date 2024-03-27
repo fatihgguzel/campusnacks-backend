@@ -4,9 +4,9 @@ import Address from './Address';
 import Restaurant from './Restaurant';
 
 class RestaurantAddress extends Address {
-  public nHood!: string | null;
+  public nHood!: string;
   public street!: string;
-  public no!: number;
+  public no!: string;
 
   public readonly restaurant?: Restaurant;
   public getRestaurant!: BelongsToGetAssociationMixin<Restaurant>;
@@ -39,7 +39,7 @@ RestaurantAddress.init(
     },
     nHood: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     street: {
       type: DataTypes.STRING,

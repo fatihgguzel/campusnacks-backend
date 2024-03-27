@@ -1,24 +1,6 @@
 import * as ENUMS from './enums';
 import { Errors } from './Errors';
 
-export interface createAdminRestaurantBody {
-  name: string;
-  phone: string;
-  email: string;
-  imageUrl?: string;
-  hasDelivery: boolean;
-  deliveryPrice?: number;
-  minimumPrice: number;
-  deliveryTime: number;
-  isBusy: boolean;
-  city: string;
-  district: string;
-  address: string;
-  nHood?: string;
-  street: string;
-  no: number;
-}
-
 export interface deleteAdminRestaurantParams {
   restaurantId: number;
 }
@@ -27,15 +9,17 @@ export interface getConfigTypeFileParams {
   fileName: string;
 }
 
-export interface postBusinessHoursBody {
-  restaurantId: number;
-  monday: any;
-  tuesday: any;
-  wednesday: any;
-  thursday: any;
-  friday: any;
-  saturday: any;
-  sunday: any;
+export interface postCreateRestaurantBody {
+  name: string;
+  phone: string;
+  email: string;
+  imageUrl?: string;
+  city: string;
+  district: string;
+  address: string;
+  nHood: string;
+  street: string;
+  no: string;
 }
 
 export interface postForgotPasswordBody {
@@ -63,10 +47,16 @@ export interface postResetPasswordBody {
   newPassword: string;
 }
 
-export interface updateRestaurantBody {
-  name?: string;
+export interface putAuthorizeAdminUserBody {
+  role: ENUMS.AdminStates;
+}
+
+export interface putAuthorizeAdminUserParams {
+  userId: number;
+}
+
+export interface putUpdateRestaurantBody {
   phone?: string;
-  email?: string;
   imageUrl?: string | null;
   hasDelivery?: boolean;
   deliveryPrice?: number | null;
@@ -78,9 +68,9 @@ export interface updateRestaurantBody {
   address?: string;
   nHood?: string;
   street?: string;
-  no?: number;
+  no?: string;
 }
 
-export interface updateRestaurantParams {
+export interface putUpdateRestaurantParams {
   restaurantId: number;
 }
