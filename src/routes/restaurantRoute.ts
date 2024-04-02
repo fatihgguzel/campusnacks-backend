@@ -71,6 +71,7 @@ router.put(
         nHood: body.nHood,
         street: body.street,
         no: body.no,
+        isOpen: body.isOpen,
       });
 
       Helpers.response(res, {

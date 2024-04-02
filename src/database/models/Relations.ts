@@ -1,4 +1,3 @@
-import BusinessHour from './BusinessHour';
 import Cuisine from './Cuisine';
 import User from './User';
 import Item from './Item';
@@ -93,11 +92,6 @@ Restaurant.belongsTo(RestaurantAddress, {
   foreignKey: 'addressId',
 });
 
-Restaurant.hasMany(BusinessHour, {
-  as: 'businessHours',
-  foreignKey: 'restaurantId',
-});
-
 Restaurant.hasMany(Item, {
   as: 'items',
   foreignKey: 'restaurantId',
@@ -116,11 +110,6 @@ Restaurant.hasMany(OrderLog, {
 RestaurantAddress.hasOne(Restaurant, {
   as: 'restaurant',
   foreignKey: 'addressId',
-});
-
-BusinessHour.belongsTo(Restaurant, {
-  as: 'restaurant',
-  foreignKey: 'restaurantId',
 });
 
 Item.belongsTo(Restaurant, {

@@ -1,6 +1,8 @@
 import * as genericJoi from './joiGeneric';
 import * as Enums from '../../types/enums';
 
+// Schemas
+
 // Body types
 export const postLoginBody = genericJoi
   .obj({
@@ -79,6 +81,7 @@ export const putUpdateRestaurantBody = genericJoi
     nHood: genericJoi.stringTrimmed.optional(),
     street: genericJoi.stringTrimmed.optional(),
     no: genericJoi.stringTrimmed.optional(),
+    isOpen: genericJoi.boolean.optional(),
   })
   .required()
   .label('putUpdateRestaurantBody');

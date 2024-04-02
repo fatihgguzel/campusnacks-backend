@@ -1,7 +1,6 @@
 import { Association, BelongsToGetAssociationMixin, BelongsToManyGetAssociationsMixin, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 import BaseModel from './BaseModel';
-import BusinessHour from './BusinessHour';
 import Item from './Item';
 import Order from './Order';
 import OrderLog from './OrderLog';
@@ -19,10 +18,8 @@ class Restaurant extends BaseModel {
   public minimumPrice!: number;
   public deliveryTime!: number;
   public isBusy!: boolean;
+  public isOpen!: boolean;
   public slug!: string; //name-nHood-street-no
-
-  public readonly businessHours?: BusinessHour[];
-  public getBusinessHours!: BelongsToManyGetAssociationsMixin<BusinessHour>;
 
   public readonly items?: Item[];
   public getItems!: BelongsToManyGetAssociationsMixin<Item>;
@@ -38,7 +35,6 @@ class Restaurant extends BaseModel {
 
   public static associations: {
     address: Association<Restaurant, RestaurantAddress>;
-    businessHours: Association<Restaurant, BusinessHour>;
     items: Association<Restaurant, Item>;
     orders: Association<Restaurant, Order>;
     orderLogs: Association<Restaurant, OrderLog>;
@@ -96,6 +92,11 @@ Restaurant.init(
     isBusy: {
       type: DataTypes.NUMBER,
       allowNull: false,
+    },
+    isOpen: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     slug: {
       type: DataTypes.STRING,
