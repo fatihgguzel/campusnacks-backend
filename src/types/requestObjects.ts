@@ -69,6 +69,7 @@ export interface putUpdateRestaurantBody {
   nHood?: string;
   street?: string;
   no?: string;
+  isOpen?: boolean;
 }
 
 export interface putUpdateRestaurantParams {

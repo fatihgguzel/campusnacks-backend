@@ -4,7 +4,6 @@ import sequelize from '../database/sequelize';
 import { AppError } from '../errors/AppError';
 import { Errors } from '../types/Errors';
 import { toSlug, Logger } from '../helpers';
-
 interface ICreateRestaurantOptions {
   name: string;
   phone: string;
@@ -93,8 +92,8 @@ interface IUpdateRestaurantOptions {
   nHood?: string;
   street?: string;
   no?: string;
+  isOpen?: boolean;
 }
-
 export async function updateRestaurant(options: IUpdateRestaurantOptions) {
   const existingRestaurant = await Restaurant.findOne({
     where: {
@@ -103,17 +102,36 @@ export async function updateRestaurant(options: IUpdateRestaurantOptions) {
   });
 
   if (!existingRestaurant) {
-    throw new AppError(Errors.RESTAURANT_NOT_EXIST, 404);
+    throw new AppError(Errors.RESTAURANT_NOT_FOUND, 404);
   }
 
-  await sequelize.transaction(async (transaction) => {
-    await existingRestaurant.update(
-      {
-        ...options,
-      },
-      {
-        transaction,
-      },
-    );
+  await existingRestaurant.update({
+    ...options,
+  });
+}
+
+interface IDeleteRestaurantOptions {
+  restaurantId: number;
+}
+export async function deleteRestaurant(options: IDeleteRestaurantOptions) {
+  const restaurant = await Restaurant.findOne({
+    where: {
+      id: options.restaurantId,
+    },
+  });
+
+  if (!restaurant) {
+    throw new AppError(Errors.RESTAURANT_NOT_FOUND);
+  }
+
+  await restaurant.destroy();
+
+  await Logger.log({
+    service: 'restaurantService',
+    function: 'deleteRestaurant',
+    message: 'restaurant deleted',
+    data: {
+      ...options,
+    },
   });
 }

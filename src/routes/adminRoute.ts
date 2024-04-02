@@ -67,6 +67,32 @@ export const swAdminRouter = {
       },
     },
   },
+  '/api/admin/restaurant/{restaurantId}': {
+    delete: {
+      summary: 'Delete restaurant',
+      tags: ['Admin'],
+      security: [{ bearerAuth: [] }],
+      parameters: [
+        {
+          in: 'path',
+          name: 'restaurantId',
+          description: 'id of the restaurant',
+          schema: {
+            type: 'number',
+          },
+        },
+      ],
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 router.post(
@@ -112,9 +138,28 @@ router.put(
       const body = req.body as RequestObjectTypes.putAuthorizeAdminUserBody;
       const params = req.params as unknown as RequestObjectTypes.putAuthorizeAdminUserParams;
 
-      console.log(user);
-
       await AdminService.authorizeUser({ adminId: user.id, userId: params.userId, adminRole: body.role });
+
+      Helpers.response(res, {
+        message: 'OK',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.delete(
+  '/:restaurantId',
+  validate({ params: RequestObjects.deleteAdminRestaurantParams }),
+  async (req: Request, res: Response) => {
+    try {
+      const params = req.params as unknown as RequestObjectTypes.deleteAdminRestaurantParams;
+      const user = req.user as User;
+
+      await AdminService.checkIsAdmin({ userId: user.id });
+
+      await RestaurantService.deleteRestaurant({ restaurantId: params.restaurantId });
 
       Helpers.response(res, {
         message: 'OK',

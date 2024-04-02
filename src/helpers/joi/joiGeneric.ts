@@ -40,3 +40,7 @@ export const stringEnum = (enums: object, name: string) => {
 export const stringEnumNullable = (enums: object, name: string) => {
   return stringEnum(enums, name).allow(null).label(`ENUMS.${name} | null`);
 };
+
+export const regex = (pattern: RegExp) => {
+  return stringTrimmed.pattern(pattern);
+};

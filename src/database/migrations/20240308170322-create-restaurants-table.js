@@ -51,6 +51,11 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
+      isOpen: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       slug: {
         type: DataTypes.STRING,
         unique: true,

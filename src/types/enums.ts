@@ -15,7 +15,7 @@ export enum UserRoleTypes {
   SUPERADMIN = '3',
 }
 
-export enum DayOfWeek {
+export enum DaysOfWeek {
   MONDAY = '0',
   TUESDAY = '1',
   WEDNESDAY = '2',
