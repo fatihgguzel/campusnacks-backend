@@ -15,6 +15,30 @@ export interface getRefreshTokenResponse {
   code: number;
 }
 
+export interface getUserDetailsResponse {
+  data: {
+    user: {
+      id: number;
+      email: string;
+      fullName: string;
+      address: {
+        id: number;
+        city: string;
+        district: string;
+        address: string;
+      };
+      phoneNumber: string;
+      role: ENUMS.UserRoleTypes;
+      provider: ENUMS.UserProviders;
+    } | null;
+    meta: {
+      studentshipExpiresAt?: Date;
+    };
+  };
+  message: string | Errors;
+  code: number;
+}
+
 export interface postLoginResponse {
   data: {
     authToken: string;

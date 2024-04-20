@@ -44,3 +44,9 @@ export const stringEnumNullable = (enums: object, name: string) => {
 export const regex = (pattern: RegExp) => {
   return stringTrimmed.pattern(pattern);
 };
+
+// DATES
+
+export const date = Joi.date();
+
+export const dateNullable = date.allow(null);

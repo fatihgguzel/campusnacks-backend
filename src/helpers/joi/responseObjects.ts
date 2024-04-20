@@ -1,5 +1,6 @@
 import * as joi from 'joi';
 import * as genericJoi from './joiGeneric';
+import * as Enums from '../../types/enums';
 import { Errors } from '../../types/Errors';
 
 const defaultResponse = {
@@ -48,3 +49,26 @@ export const getRefreshTokenResponse = genericJoi
   })
   .required()
   .label('getRefreshTokenResponse');
+
+export const getUserDetailsResponse = genericJoi.obj({
+  ...defaultResponse,
+  data: genericJoi.obj({
+    user: genericJoi.objNullable({
+      id: genericJoi.num,
+      email: genericJoi.email,
+      fullName: genericJoi.stringTrimmed,
+      address: genericJoi.obj({
+        id: genericJoi.num,
+        city: genericJoi.stringTrimmed,
+        district: genericJoi.stringTrimmed,
+        address: genericJoi.stringTrimmed,
+      }),
+      phoneNumber: genericJoi.stringTrimmed,
+      role: genericJoi.stringEnum(Enums.UserRoleTypes, 'UserRoleTypes'),
+      provider: genericJoi.stringEnum(Enums.UserProviders, 'UserProviders'),
+    }),
+    meta: genericJoi.obj({
+      studentshipExpiresAt: genericJoi.date.optional(),
+    }),
+  }),
+});
