@@ -16,7 +16,7 @@ class Restaurant extends BaseModel {
   public hasDelivery!: boolean;
   public deliveryPrice!: number | null;
   public minimumPrice!: number;
-  public deliveryTime!: number;
+  public deliveryTime!: number; // in minutes
   public isBusy!: boolean;
   public isOpen!: boolean;
   public slug!: string; //name-nHood-street-no

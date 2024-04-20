@@ -63,3 +63,32 @@ export async function createUser(options: ICreateUserOptions) {
 
   return user;
 }
+
+interface IGetUserDetailsOptions {
+  userId: number;
+}
+export async function getUserDetails(options: IGetUserDetailsOptions) {
+  const user = await User.findOne({
+    where: {
+      id: options.userId,
+    },
+    attributes: ['id', 'email', 'fullName', 'phoneNumber', 'role', 'provider', 'studentshipExpiresAt'],
+    include: [
+      {
+        model: UserAddress,
+        as: 'address',
+        attributes: ['id', 'city', 'district', 'address'],
+      },
+    ],
+  });
+
+  const meta: {
+    studentshipExpiresAt?: Date;
+  } = {};
+
+  if (user?.studentshipExpiresAt) {
+    meta.studentshipExpiresAt = user.studentshipExpiresAt;
+  }
+
+  return { user, meta };
+}
