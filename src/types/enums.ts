@@ -80,3 +80,7 @@ export enum AdminStates {
   ADMIN = '0',
   SUPERADMIN = '1',
 }
+
+export enum Campuses {
+  IYTE = '0',
+}

@@ -1,6 +1,6 @@
 'use strict';
 
-const { UserProviders, UserRoleTypes } = require('../../../dist/types/enums');
+const { UserProviders, UserRoleTypes, Campuses } = require('../../../dist/types/enums');
 const User = require('../../../dist/database/models/User').default;
 const Restaurant = require('../../../dist/database/models/Restaurant').default;
 const RestaurantAddress = require('../../../dist/database/models/RestaurantAddress').default;
@@ -54,6 +54,7 @@ module.exports = {
       isBusy: false,
       isOpen: true,
       slug: 'mavis-gulbahce-12112-11',
+      campus: Campuses.IYTE,
     });
   },
   down: async (queryInterface) => {

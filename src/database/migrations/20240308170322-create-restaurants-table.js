@@ -1,5 +1,7 @@
 'use strict';
 
+const { Campuses } = require('../../../dist/types/enums');
+
 module.exports = {
   async up(queryInterface, { DataTypes }) {
     await queryInterface.createTable('Restaurants', {
@@ -59,6 +61,10 @@ module.exports = {
       slug: {
         type: DataTypes.STRING,
         unique: true,
+        allowNull: false,
+      },
+      campus: {
+        type: DataTypes.ENUM(...Object.values(Campuses)),
         allowNull: false,
       },
       createdAt: {

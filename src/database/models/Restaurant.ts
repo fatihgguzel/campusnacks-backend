@@ -5,6 +5,7 @@ import Item from './Item';
 import Order from './Order';
 import OrderLog from './OrderLog';
 import RestaurantAddress from './RestaurantAddress';
+import * as Enums from '../../types/enums';
 
 class Restaurant extends BaseModel {
   public id!: number;
@@ -20,6 +21,7 @@ class Restaurant extends BaseModel {
   public isBusy!: boolean;
   public isOpen!: boolean;
   public slug!: string; //name-nHood-street-no
+  public campus!: string;
 
   public readonly items?: Item[];
   public getItems!: BelongsToManyGetAssociationsMixin<Item>;
@@ -102,6 +104,10 @@ Restaurant.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+    },
+    campus: {
+      type: DataTypes.ENUM(...Object.values(Enums.Campuses)),
+      allowNull: false,
     },
   },
   {
