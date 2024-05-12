@@ -27,22 +27,10 @@ export const swRestaurantRouter = {
         },
       },
     },
-  },
-  '/api/restaurant/{restaurantId}': {
     put: {
-      summary: 'Update restaurant by its id',
+      summary: 'Update restaurant',
       tags: ['Restaurant'],
       security: [{ bearerAuth: [] }],
-      parameters: [
-        {
-          in: 'path',
-          name: 'restaurantId',
-          description: 'Id of restaurant as number',
-          schema: {
-            type: 'number',
-          },
-        },
-      ],
       requestBody: {
         content: {
           'application/json': {
@@ -79,18 +67,17 @@ router.get('/', RequireAuth.requireJwt, async (req: Request, res: Response) => {
 });
 
 router.put(
-  '/:restaurantId',
+  '/',
   validate({
     body: RequestObjects.putUpdateRestaurantBody,
-    params: RequestObjects.putUpdateRestaurantParams,
   }),
   async (req: Request, res: Response) => {
     try {
+      const restaurant = req.user as Restaurant;
       const body = req.body as RequestObjectsTypes.putUpdateRestaurantBody;
-      const params = req.params as unknown as RequestObjectsTypes.putUpdateRestaurantParams;
 
       await RestaurantService.updateRestaurant({
-        restaurantId: params.restaurantId,
+        restaurantId: restaurant.id,
         phone: body.phone,
         imageUrl: body.imageUrl,
         hasDelivery: body.hasDelivery,

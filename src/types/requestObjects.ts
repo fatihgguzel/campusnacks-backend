@@ -71,7 +71,3 @@ export interface putUpdateRestaurantBody {
   no?: string;
   isOpen?: boolean;
 }
-
-export interface putUpdateRestaurantParams {
-  restaurantId: number;
-}

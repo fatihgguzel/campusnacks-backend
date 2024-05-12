@@ -86,13 +86,6 @@ export const putUpdateRestaurantBody = genericJoi
   .required()
   .label('putUpdateRestaurantBody');
 
-export const putUpdateRestaurantParams = genericJoi
-  .obj({
-    restaurantId: genericJoi.num.required(),
-  })
-  .required()
-  .label('putUpdateRestaurantParams');
-
 export const deleteAdminRestaurantParams = genericJoi
   .obj({
     restaurantId: genericJoi.num.required(),
