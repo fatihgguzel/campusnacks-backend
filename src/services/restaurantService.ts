@@ -16,7 +16,6 @@ interface ICreateRestaurantOptions {
   street: string;
   no: string;
 }
-
 export async function createRestaurant(options: ICreateRestaurantOptions) {
   const restaurantAddress = [options.name, options.nHood, options.street, options.no].join(' ');
   const restaurantSlug = toSlug(restaurantAddress);
@@ -134,4 +133,39 @@ export async function deleteRestaurant(options: IDeleteRestaurantOptions) {
       ...options,
     },
   });
+}
+
+interface IGetRestaurantDetailsOptions {
+  restaurantId: number;
+}
+export async function getRestaurantDetails(options: IGetRestaurantDetailsOptions) {
+  const restaurant = await Restaurant.findOne({
+    where: {
+      id: options.restaurantId,
+    },
+    attributes: [
+      'id',
+      'name',
+      'phone',
+      'email',
+      'imageUrl',
+      'hasDelivery',
+      'deliveryPrice',
+      'minimumPrice',
+      'deliveryTime',
+      'isBusy',
+      'isOpen',
+      'slug',
+      'campus',
+    ],
+    include: [
+      {
+        model: RestaurantAddress,
+        as: 'address',
+        attributes: ['id', 'city', 'district', 'address', 'nHood', 'street'],
+      },
+    ],
+  });
+
+  return { restaurant };
 }

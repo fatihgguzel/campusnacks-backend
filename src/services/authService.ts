@@ -9,6 +9,7 @@ import ShortCode from '../database/models/ShortCode';
 import PasswordResetRequest from '../database/models/PasswordResetRequest';
 import { shortCodeGenerator } from '../helpers';
 import moment from 'moment';
+import Restaurant from '../database/models/Restaurant';
 
 interface IRegisterUserOptions {
   email: string;
@@ -53,6 +54,7 @@ export async function registerUser(options: IRegisterUserOptions) {
   const authToken = Helpers.jwtGenerator({
     id: user.id,
     jwtSecureCode: bcrypt.hashSync(user.jwtSecureCode, bcrypt.genSaltSync(10)),
+    isUser: true,
   });
 
   return {
@@ -89,6 +91,39 @@ export async function loginUser(options: ILoginUserOptions) {
   const authToken = Helpers.jwtGenerator({
     id: user.id,
     jwtSecureCode: bcrypt.hashSync(user.jwtSecureCode, bcrypt.genSaltSync(10)),
+    isUser: true,
+  });
+
+  return {
+    authToken,
+  };
+}
+
+interface ILoginRestaurantOptions {
+  email: string;
+  password: string;
+}
+export async function loginRestaurant(options: ILoginRestaurantOptions) {
+  const restaurant = await Restaurant.findOne({
+    where: {
+      email: options.email,
+    },
+  });
+
+  if (!restaurant) {
+    throw new AppError(Errors.INVALID_CREDENTIALS, 400);
+  }
+
+  const isPasswordMatch = await bcrypt.compare(options.password, restaurant.hashPassword);
+
+  if (!isPasswordMatch) {
+    throw new AppError(Errors.INVALID_CREDENTIALS, 400);
+  }
+
+  const authToken = Helpers.jwtGenerator({
+    id: restaurant.id,
+    jwtSecureCode: bcrypt.hashSync(restaurant.jwtSecureCode, bcrypt.genSaltSync(10)),
+    isUser: false,
   });
 
   return {
@@ -215,6 +250,7 @@ export function refreshToken(options: IRefreshTokenOptions) {
   const authToken = Helpers.jwtGenerator({
     id: options.userId,
     jwtSecureCode: options.secureCode,
+    isUser: true,
   });
 
   return authToken;

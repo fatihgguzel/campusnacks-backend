@@ -21,7 +21,9 @@ class Restaurant extends BaseModel {
   public isBusy!: boolean;
   public isOpen!: boolean;
   public slug!: string; //name-nHood-street-no
-  public campus!: string;
+  public campus!: Enums.Campuses;
+  public hashPassword!: string;
+  public jwtSecureCode!: string;
 
   public readonly items?: Item[];
   public getItems!: BelongsToManyGetAssociationsMixin<Item>;
@@ -107,6 +109,14 @@ Restaurant.init(
     },
     campus: {
       type: DataTypes.ENUM(...Object.values(Enums.Campuses)),
+      allowNull: false,
+    },
+    hashPassword: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    jwtSecureCode: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },

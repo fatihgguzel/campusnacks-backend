@@ -5,11 +5,29 @@ import * as ResponseObjects from '../helpers/joi/responseObjects';
 import validate from '../middlewares/validator';
 import * as Helpers from '../helpers';
 import * as RequestObjectsTypes from '../types/requestObjects';
+import * as RequireAuth from '../middlewares/requireAuth';
 import { RestaurantService } from '../services';
+import Restaurant from '../database/models/Restaurant';
 
 const router = Router();
 
 export const swRestaurantRouter = {
+  '/api/restaurant': {
+    get: {
+      summary: 'Get restaurant details',
+      tags: ['Restaurant'],
+      security: [{ bearerAuth: [] }],
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.getRestaurantDetailsResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
   '/api/restaurant/{restaurantId}': {
     put: {
       summary: 'Update restaurant by its id',
@@ -44,6 +62,21 @@ export const swRestaurantRouter = {
     },
   },
 };
+
+router.get('/', RequireAuth.requireJwt, async (req: Request, res: Response) => {
+  try {
+    const restaurant = req.user as Restaurant;
+
+    const restaurantDetails = await RestaurantService.getRestaurantDetails({ restaurantId: restaurant.id });
+
+    Helpers.response(res, {
+      data: restaurantDetails,
+      message: '',
+    });
+  } catch (err) {
+    Helpers.error(res, err);
+  }
+});
 
 router.put(
   '/:restaurantId',

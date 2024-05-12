@@ -37,16 +37,16 @@ module.exports = {
     const restaurantAddress = await RestaurantAddress.create({
       city: 'izmir',
       district: 'urla',
-      address: 'mavis ev yemekleri',
+      address: 'campusnacks ev yemekleri',
       nHood: 'gulbahce',
       street: '12112',
       no: '11',
     });
 
     const restaurant = await Restaurant.create({
-      name: 'Mavis Ev Yemekleri',
+      name: 'CampuSnacks Ev Yemekleri',
       phone: '+901111111111',
-      email: 'mavisevyemekleri@yemek.com',
+      email: 'campusnacks@yemek.com',
       addressId: restaurantAddress.id,
       hasDelivery: true,
       minimumPrice: 0,
@@ -55,6 +55,8 @@ module.exports = {
       isOpen: true,
       slug: 'mavis-gulbahce-12112-11',
       campus: Campuses.IYTE,
+      jwtSecureCode: uuid(),
+      hashPassword: bcrypt.hashSync('8e8B0pfExQJhM2S', bcrypt.genSaltSync(10)),
     });
   },
   down: async (queryInterface) => {

@@ -16,6 +16,7 @@ import { response, error } from './helpers';
 import { swaggerDoc } from './swagger.def';
 import {} from './routes';
 import { requireJwt } from './middlewares/requireAuth';
+import requireRole, { REQUIRE_ROLES } from './middlewares/requireRole';
 import { authRoute, configRoute, adminRoute, restaurantRoute, userRoute } from './routes';
 
 sequelize
@@ -64,10 +65,12 @@ app.get('/api', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', authRoute);
-app.use('/api/user', userRoute);
 app.use('/api/config', configRoute);
-app.use('/api/admin', requireJwt, adminRoute);
-app.use('/api/restaurant', requireJwt, restaurantRoute);
+
+app.use('/api/user', requireJwt, requireRole(REQUIRE_ROLES.USER), userRoute);
+app.use('/api/admin', requireJwt, requireRole(REQUIRE_ROLES.USER), adminRoute);
+
+app.use('/api/restaurant', requireJwt, requireJwt, requireRole(REQUIRE_ROLES.RESTAURANT), restaurantRoute);
 
 app.all('*', (req: Request, res: Response) => {
   response(res, {

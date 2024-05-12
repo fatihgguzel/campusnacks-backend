@@ -15,6 +15,37 @@ export interface getRefreshTokenResponse {
   code: number;
 }
 
+export interface getRestaurantDetailsResponse {
+  data: {
+    restaurant: {
+      id: number;
+      name: string;
+      phone: string;
+      email: string;
+      address: {
+        id: number;
+        city: string;
+        district: string;
+        address: string;
+        nHood: string;
+        street: string;
+        no: string;
+      };
+      imageUrl: string | null;
+      hasDelivery: boolean;
+      deliveryPrice: number | null;
+      minimumPrice: number;
+      deliveryTime: number;
+      isBusy: boolean;
+      isOpen: boolean;
+      slug: string;
+      campus: ENUMS.Campuses;
+    } | null;
+  };
+  message: string | Errors;
+  code: number;
+}
+
 export interface getUserDetailsResponse {
   data: {
     user: {

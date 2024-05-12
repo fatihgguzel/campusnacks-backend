@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export default function (payload: { id: number; jwtSecureCode: string }) {
+export default function (payload: { id: number; jwtSecureCode: string; isUser: boolean }) {
   return jwt.sign(
     {
       ...payload,

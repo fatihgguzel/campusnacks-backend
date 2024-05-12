@@ -3,7 +3,7 @@
 const { Campuses } = require('../../../dist/types/enums');
 
 module.exports = {
-  async up(queryInterface, { DataTypes }) {
+  async up(queryInterface, { DataTypes, UUIDV4 }) {
     await queryInterface.createTable('Restaurants', {
       id: {
         type: DataTypes.INTEGER,
@@ -65,6 +65,15 @@ module.exports = {
       },
       campus: {
         type: DataTypes.ENUM(...Object.values(Campuses)),
+        allowNull: false,
+      },
+      hashPassword: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      jwtSecureCode: {
+        type: DataTypes.STRING,
+        defaultValue: UUIDV4,
         allowNull: false,
       },
       createdAt: {
