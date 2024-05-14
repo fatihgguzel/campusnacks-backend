@@ -106,3 +106,8 @@ export const putAuthorizeAdminUserBody = genericJoi
   })
   .required()
   .label('putAuthorizeAdminUserBody');
+
+export const paginationQuery = genericJoi.obj({
+  page: genericJoi.num.integer().min(1).required(),
+  limit: genericJoi.num.integer().min(1).required(),
+});

@@ -102,3 +102,36 @@ export const getRestaurantDetailsResponse = genericJoi.obj({
     }),
   }),
 });
+
+export const getAllRestaurantsResponse = genericJoi.obj({
+  ...defaultResponse,
+  data: genericJoi.obj({
+    count: genericJoi.num,
+    restaurants: genericJoi.array.items({
+      restaurant: genericJoi.objNullable({
+        id: genericJoi.num,
+        name: genericJoi.stringTrimmed,
+        phone: genericJoi.stringTrimmed,
+        email: genericJoi.email,
+        address: genericJoi.obj({
+          id: genericJoi.num,
+          city: genericJoi.stringTrimmed,
+          district: genericJoi.stringTrimmed,
+          address: genericJoi.stringTrimmed,
+          nHood: genericJoi.stringTrimmed,
+          street: genericJoi.stringTrimmed,
+          no: genericJoi.stringTrimmed,
+        }),
+        imageUrl: genericJoi.stringTrimmed.allow(null),
+        hasDelivery: genericJoi.boolean,
+        deliveryPrice: genericJoi.num.allow(null),
+        minimumPrice: genericJoi.num,
+        deliveryTime: genericJoi.num,
+        isBusy: genericJoi.boolean,
+        isOpen: genericJoi.boolean,
+        slug: genericJoi.stringTrimmed,
+        campus: genericJoi.stringEnum(Enums.Campuses, 'Campuses'),
+      }),
+    }),
+  }),
+});

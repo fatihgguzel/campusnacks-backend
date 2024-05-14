@@ -9,6 +9,11 @@ export interface getConfigTypeFileParams {
   fileName: string;
 }
 
+export interface paginationQuery {
+  page: number;
+  limit: number;
+}
+
 export interface postCreateRestaurantBody {
   name: string;
   phone: string;

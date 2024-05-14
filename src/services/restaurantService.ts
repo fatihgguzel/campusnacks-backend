@@ -169,3 +169,37 @@ export async function getRestaurantDetails(options: IGetRestaurantDetailsOptions
 
   return { restaurant };
 }
+
+interface IGetRestaurants {
+  limit: number;
+  offset: number;
+}
+
+export async function getRestaurants(options: IGetRestaurants) {
+  const result = await Restaurant.findAndCountAll({
+    limit: options.limit,
+    offset: options.offset,
+    attributes: [
+      'id',
+      'name',
+      'phone',
+      'email',
+      'imageUrl',
+      'hasDelivery',
+      'deliveryPrice',
+      'minimumPrice',
+      'deliveryTime',
+      'isBusy',
+      'isOpen',
+      'slug',
+      'campus',
+    ],
+    include: {
+      model: RestaurantAddress,
+      as: 'address',
+      attributes: ['id', 'city', 'district', 'address', 'nHood', 'street'],
+    },
+  });
+
+  return result;
+}

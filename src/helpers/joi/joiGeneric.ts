@@ -29,6 +29,8 @@ export const objNullable = (fields?: Record<string, any>) => {
   return obj(fields || {}).allow(null);
 };
 
+export const array = Joi.array();
+
 export const arr = (schema: Joi.Schema) => {
   return Joi.array().items(schema).empty(Joi.array().length(0)).default([]);
 };
