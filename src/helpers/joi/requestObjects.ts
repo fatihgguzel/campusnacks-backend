@@ -62,6 +62,8 @@ export const postCreateRestaurantBody = genericJoi
     nHood: genericJoi.stringTrimmed.required(),
     street: genericJoi.stringTrimmed.required(),
     no: genericJoi.stringTrimmed.required(),
+    campus: genericJoi.stringEnum(Enums.Campuses, 'Campuses').default('0').optional(),
+    password: genericJoi.password.required(),
   })
   .required()
   .label('postCreateRestaurantBody');
@@ -106,3 +108,12 @@ export const putAuthorizeAdminUserBody = genericJoi
   })
   .required()
   .label('putAuthorizeAdminUserBody');
+
+export const getRestaurantsQuery = genericJoi
+  .obj({
+    offset: genericJoi.num.min(0).default(0).required(),
+    limit: genericJoi.num.min(0).default(16).required(),
+    campus: genericJoi.stringEnum(Enums.Campuses, 'Campuses').default(Enums.Campuses.IYTE).optional(),
+  })
+  .required()
+  .label('getRestaurantsQuery');

@@ -102,3 +102,21 @@ export const getRestaurantDetailsResponse = genericJoi.obj({
     }),
   }),
 });
+
+export const getRestaurantsResponse = genericJoi.obj({
+  ...defaultResponse,
+  data: genericJoi.obj({
+    totalCount: genericJoi.num,
+    restaurants: genericJoi.arr(
+      genericJoi.obj({
+        id: genericJoi.num,
+        name: genericJoi.stringTrimmed,
+        minimumPrice: genericJoi.num,
+        deliveryTime: genericJoi.num,
+        isBusy: genericJoi.boolean,
+        hasDelivery: genericJoi.boolean,
+        imageUrl: genericJoi.stringTrimmed.allow(null),
+      }),
+    ),
+  }),
+});

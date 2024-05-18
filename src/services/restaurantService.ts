@@ -4,6 +4,10 @@ import sequelize from '../database/sequelize';
 import { AppError } from '../errors/AppError';
 import { Errors } from '../types/Errors';
 import { toSlug, Logger } from '../helpers';
+import * as Enums from '../types/enums';
+import { uuid } from 'uuidv4';
+import bcrypt from 'bcrypt';
+
 interface ICreateRestaurantOptions {
   name: string;
   phone: string;
@@ -15,6 +19,8 @@ interface ICreateRestaurantOptions {
   nHood: string;
   street: string;
   no: string;
+  campus: Enums.Campuses;
+  password: string;
 }
 export async function createRestaurant(options: ICreateRestaurantOptions) {
   const restaurantAddress = [options.name, options.nHood, options.street, options.no].join(' ');
@@ -27,6 +33,7 @@ export async function createRestaurant(options: ICreateRestaurantOptions) {
   });
 
   if (existingRestaurant) {
+    console.log(existingRestaurant.slug);
     throw new AppError(Errors.RESTAURANT_EXIST, 400);
   }
 
@@ -56,6 +63,9 @@ export async function createRestaurant(options: ICreateRestaurantOptions) {
         deliveryTime: 0,
         isBusy: false,
         slug: restaurantSlug,
+        hashPassword: bcrypt.hashSync(options.password, bcrypt.genSaltSync(10)),
+        campus: options.campus,
+        jwtSecureCode: uuid(),
       },
       {
         transaction,
@@ -168,4 +178,22 @@ export async function getRestaurantDetails(options: IGetRestaurantDetailsOptions
   });
 
   return { restaurant };
+}
+
+interface IGetRestaurantsOptions {
+  limit: number;
+  offset: number;
+  campus: Enums.Campuses;
+}
+export async function getRestaurants(options: IGetRestaurantsOptions) {
+  const { count, rows } = await Restaurant.findAndCountAll({
+    where: {
+      campus: options.campus,
+    },
+    attributes: ['id', 'name', 'hasDelivery', 'imageUrl', 'minimumPrice', 'deliveryTime', 'isBusy'],
+    offset: options.offset,
+    limit: options.limit,
+  });
+
+  return { totalCount: count, restaurants: rows };
 }

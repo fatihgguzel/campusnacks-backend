@@ -46,6 +46,23 @@ export interface getRestaurantDetailsResponse {
   code: number;
 }
 
+export interface getRestaurantsResponse {
+  data: {
+    totalCount: number;
+    restaurants: {
+      id: number;
+      name: string;
+      minimumPrice: number;
+      deliveryTime: number;
+      isBusy: boolean;
+      hasDelivery: boolean;
+      imageUrl: string | null;
+    }[];
+  };
+  message: string | Errors;
+  code: number;
+}
+
 export interface getUserDetailsResponse {
   data: {
     user: {

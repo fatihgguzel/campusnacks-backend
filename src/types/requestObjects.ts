@@ -9,6 +9,12 @@ export interface getConfigTypeFileParams {
   fileName: string;
 }
 
+export interface getRestaurantsQuery {
+  offset: number;
+  limit: number;
+  campus?: ENUMS.Campuses;
+}
+
 export interface postCreateRestaurantBody {
   name: string;
   phone: string;
@@ -20,6 +26,8 @@ export interface postCreateRestaurantBody {
   nHood: string;
   street: string;
   no: string;
+  campus?: ENUMS.Campuses;
+  password: string;
 }
 
 export interface postForgotPasswordBody {

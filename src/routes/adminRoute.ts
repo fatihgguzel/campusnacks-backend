@@ -118,6 +118,8 @@ router.post(
         nHood: body.nHood,
         no: body.no,
         street: body.street,
+        campus: body.campus!,
+        password: body.password,
       });
 
       Helpers.response(res, {
