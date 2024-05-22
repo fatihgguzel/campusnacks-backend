@@ -53,7 +53,7 @@ module.exports = {
       },
       optionId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

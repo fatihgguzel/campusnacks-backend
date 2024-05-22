@@ -15,6 +15,41 @@ export interface getRefreshTokenResponse {
   code: number;
 }
 
+export interface getRestaurantContentResponse {
+  data: {
+    restaurantInfo: {
+      id: number;
+      name: string;
+      isOpen: boolean;
+      hasDelivery: boolean;
+      minimumPrice: number;
+      imageUrl: string | null;
+      deliveryPrice: number | null;
+    };
+    items: {
+      id: number;
+      restaurantId: number;
+      hasDiscount: boolean;
+      discount: number | null;
+      name: string;
+      description: string;
+      imageUrl: string | null;
+      price: number;
+      menu?: {
+        id: number;
+        hasBadge: boolean;
+        badgeTag: string | null;
+      };
+      product?: {
+        id: number;
+        productType: ENUMS.ProductTypes;
+      };
+    }[];
+  };
+  message: string | Errors;
+  code: number;
+}
+
 export interface getRestaurantDetailsResponse {
   data: {
     restaurant: {
@@ -40,6 +75,25 @@ export interface getRestaurantDetailsResponse {
       isOpen: boolean;
       slug: string;
       campus: ENUMS.Campuses;
+      items: {
+        id: number;
+        restaurantId: number;
+        hasDiscount: boolean;
+        discount: number | null;
+        name: string;
+        description: string;
+        imageUrl: string | null;
+        price: number;
+        menu?: {
+          id: number;
+          hasBadge: boolean;
+          badgeTag: string | null;
+        };
+        product?: {
+          id: number;
+          productType: ENUMS.ProductTypes;
+        };
+      }[];
     } | null;
   };
   message: string | Errors;
@@ -57,6 +111,7 @@ export interface getRestaurantsResponse {
       isBusy: boolean;
       hasDelivery: boolean;
       imageUrl: string | null;
+      deliveryPrice: number | null;
     }[];
   };
   message: string | Errors;

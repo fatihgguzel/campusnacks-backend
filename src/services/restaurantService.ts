@@ -7,6 +7,10 @@ import { toSlug, Logger } from '../helpers';
 import * as Enums from '../types/enums';
 import { uuid } from 'uuidv4';
 import bcrypt from 'bcrypt';
+import { getRestaurantContentResponse } from '../types/responseObjects';
+import Product from '../database/models/Product';
+import Item from '../database/models/Item';
+import Menu from '../database/models/Menu';
 
 interface ICreateRestaurantOptions {
   name: string;
@@ -174,8 +178,54 @@ export async function getRestaurantDetails(options: IGetRestaurantDetailsOptions
         as: 'address',
         attributes: ['id', 'city', 'district', 'address', 'nHood', 'street'],
       },
+      {
+        model: Item,
+        as: 'items',
+        include: [
+          {
+            model: Product,
+            as: 'product',
+          },
+          {
+            model: Menu,
+            as: 'menu',
+          },
+        ],
+      },
     ],
+    order: [[{ model: Item, as: 'items' }, 'price', 'DESC']],
   });
+
+  const items = [];
+
+  if (restaurant?.items?.length) {
+    restaurant.items.map((item) => {
+      items.push({
+        id: item.id,
+        restaurantId: item.restaurantId,
+        hasDiscount: item.hasDiscount,
+        discount: item.discount,
+        name: item.name,
+        description: item.description,
+        imageUrl: item.imageUrl,
+        price: item.price,
+        ...(item.menu
+          ? {
+              menu: {
+                id: item.menu.id,
+                hasBadge: item.menu.hasBadge,
+                badgeTag: item.menu.badgeTag,
+              },
+            }
+          : {
+              product: {
+                id: item.product!.id,
+                productType: item.product!.productType,
+              },
+            }),
+      });
+    });
+  }
 
   return { restaurant };
 }
@@ -196,4 +246,144 @@ export async function getRestaurants(options: IGetRestaurantsOptions) {
   });
 
   return { totalCount: count, restaurants: rows };
+}
+
+interface IGetRestaurantContentOptions {
+  restaurantId: number;
+}
+export async function getRestaurantContent(options: IGetRestaurantContentOptions) {
+  const restaurant = await Restaurant.findOne({
+    where: {
+      id: options.restaurantId,
+    },
+    include: [
+      {
+        model: Item,
+        as: 'items',
+        include: [
+          {
+            model: Product,
+            as: 'product',
+          },
+          {
+            model: Menu,
+            as: 'menu',
+          },
+        ],
+      },
+    ],
+    order: [[{ model: Item, as: 'items' }, 'price', 'DESC']],
+  });
+
+  if (!restaurant) {
+    throw new AppError(Errors.RESTAURANT_NOT_FOUND, 404);
+  }
+
+  const response: getRestaurantContentResponse['data'] = {
+    restaurantInfo: {
+      id: restaurant.id,
+      name: restaurant.name,
+      isOpen: restaurant.isOpen,
+      hasDelivery: restaurant.hasDelivery,
+      minimumPrice: restaurant.minimumPrice,
+      imageUrl: restaurant.imageUrl,
+      deliveryPrice: restaurant.deliveryPrice,
+    },
+    items: [],
+  };
+
+  if (restaurant.items?.length) {
+    restaurant.items.map((item) => {
+      response.items.push({
+        id: item.id,
+        restaurantId: item.restaurantId,
+        hasDiscount: item.hasDiscount,
+        discount: item.discount,
+        name: item.name,
+        description: item.description,
+        imageUrl: item.imageUrl,
+        price: item.price,
+        ...(item.menu
+          ? {
+              menu: {
+                id: item.menu.id,
+                hasBadge: item.menu.hasBadge,
+                badgeTag: item.menu.badgeTag,
+              },
+            }
+          : {
+              product: {
+                id: item.product!.id,
+                productType: item.product!.productType,
+              },
+            }),
+      });
+    });
+  }
+
+  return response;
+}
+
+interface IAddItemOptions {
+  restaurantId: number;
+  name: string;
+  description: string;
+  price: number;
+  itemType: Enums.ItemTypes;
+  imageUrl: string | null;
+}
+export async function addItem(options: IAddItemOptions) {
+  const restaurant = await Restaurant.findOne({
+    where: {
+      id: options.restaurantId,
+    },
+  });
+
+  if (!restaurant) {
+    throw new AppError(Errors.RESTAURANT_NOT_FOUND, 404);
+  }
+
+  switch (options.itemType) {
+    case Enums.ItemTypes.PRODUCT:
+      const itemProduct = await Product.create({
+        productType: Enums.ProductTypes.EDIBLE,
+      });
+
+      await Item.create({
+        hasDiscount: false,
+        discount: null,
+        name: options.name,
+        description: options.description,
+        imageUrl: options.imageUrl,
+        price: options.price,
+        restaurantId: options.restaurantId,
+        cuisineId: 1,
+        productId: itemProduct.id,
+        optionId: null,
+        menuId: null,
+      });
+
+      break;
+    case Enums.ItemTypes.MENU:
+      const itemMenu = await Menu.create({
+        hasBadge: false,
+        badgeTag: null,
+      });
+
+      await Item.create({
+        hasDiscount: false,
+        discount: null,
+        name: options.name,
+        description: options.description,
+        imageUrl: options.imageUrl,
+        price: options.price,
+        restaurantId: options.restaurantId,
+        cuisineId: 1,
+        productId: null,
+        optionId: null,
+        menuId: itemMenu.id,
+      });
+
+      break;
+  }
 }

@@ -39,12 +39,9 @@ export enum CuisineTypes {
 }
 
 export enum ProductTypes {
-  PIZZA = '0',
-  BURGER = '1',
-  SANDWICH = '2',
-  PASTA = '3',
-  SALAD = '4',
-  SUSHI = '5',
+  EDIBLE = '0',
+  DRINKABLE = '1',
+  DESSERT = '2',
 }
 
 export enum OrderStatusTypes {
@@ -83,4 +80,9 @@ export enum AdminStates {
 
 export enum Campuses {
   IYTE = '0',
+}
+
+export enum ItemTypes {
+  PRODUCT = '0',
+  MENU = '1',
 }

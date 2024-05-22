@@ -117,3 +117,18 @@ export const getRestaurantsQuery = genericJoi
   })
   .required()
   .label('getRestaurantsQuery');
+
+export const getRestaurantContentParams = genericJoi
+  .obj({
+    restaurantId: genericJoi.num.required(),
+  })
+  .required()
+  .label('getRestaurantContentParams');
+
+export const postRestaurantAddItemBody = genericJoi.obj({
+  name: genericJoi.stringTrimmed.required(),
+  description: genericJoi.stringTrimmed.required(),
+  imageUrl: genericJoi.stringTrimmed.optional().default(null),
+  price: genericJoi.num.required(),
+  itemType: genericJoi.stringEnum(Enums.ItemTypes, 'ItemTypes').required(),
+});

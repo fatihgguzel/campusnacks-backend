@@ -1,21 +1,13 @@
-import { DataTypes, BelongsToGetAssociationMixin, Association } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 import sequelize from '../sequelize';
 import { OptionsTypes } from '../../types/enums';
 import BaseModel from './BaseModel';
-import Item from './Item';
 
 class Option extends BaseModel {
   public id!: number;
   public optionsType!: string;
   public data!: JSON;
-
-  public readonly item?: Item;
-  public getItem!: BelongsToGetAssociationMixin<Item>;
-
-  public static associations: {
-    item: Association<Option, Item>;
-  };
 }
 
 Option.init(

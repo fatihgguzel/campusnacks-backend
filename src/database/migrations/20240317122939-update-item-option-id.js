@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.changeColumn('Items', 'optionId', {
       type: DataTypes.INTEGER,
       references: { model: 'Options', key: 'id' },
-      allowNull: false,
+      allowNull: true,
     });
   },
 };

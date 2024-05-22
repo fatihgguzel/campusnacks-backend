@@ -2,7 +2,6 @@ import Cuisine from './Cuisine';
 import User from './User';
 import Item from './Item';
 import Menu from './Menu';
-import MenuProduct from './MenuProduct';
 import Order from './Order';
 import OrderItem from './OrderItem';
 import OrderLog from './OrderLog';
@@ -137,43 +136,13 @@ Item.belongsTo(Option, {
   foreignKey: 'optionId',
 });
 
-Option.hasOne(Item, {
-  as: 'item',
-  foreignKey: 'optionId',
-});
-
-Cuisine.hasOne(Item, {
-  as: 'item',
-  foreignKey: 'cuisineId',
-});
-
-MenuProduct.belongsTo(Product, {
-  as: 'product',
-  foreignKey: 'productId',
-});
-
-MenuProduct.belongsTo(Menu, {
-  as: 'menu',
-  foreignKey: 'menuId',
-});
-
 Product.hasOne(Item, {
   as: 'item',
   foreignKey: 'productId',
 });
 
-Product.hasOne(MenuProduct, {
-  as: 'menuProduct',
-  foreignKey: 'productId',
-});
-
 Menu.hasOne(Item, {
   as: 'item',
-  foreignKey: 'menuId',
-});
-
-Menu.hasMany(MenuProduct, {
-  as: 'menuProducts',
   foreignKey: 'menuId',
 });
 

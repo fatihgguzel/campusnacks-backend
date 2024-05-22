@@ -1,8 +1,7 @@
-import { DataTypes, BelongsToGetAssociationMixin, BelongsToManyGetAssociationsMixin, Association } from 'sequelize';
+import { DataTypes, BelongsToGetAssociationMixin, Association } from 'sequelize';
 import sequelize from '../sequelize';
 import BaseModel from './BaseModel';
 import Item from './Item';
-import MenuProduct from './MenuProduct';
 
 class Menu extends BaseModel {
   public id!: number;
@@ -12,12 +11,8 @@ class Menu extends BaseModel {
   public readonly item?: Item;
   public getItem!: BelongsToGetAssociationMixin<Item>;
 
-  public readonly menuProducts!: MenuProduct[];
-  public getMenuProducts!: BelongsToManyGetAssociationsMixin<MenuProduct>;
-
   public static associations: {
     item: Association<Menu, Item>;
-    menuProducts: Association<Menu, MenuProduct>;
   };
 }
 

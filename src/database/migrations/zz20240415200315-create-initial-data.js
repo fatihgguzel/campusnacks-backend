@@ -1,8 +1,9 @@
 'use strict';
 
-const { UserProviders, UserRoleTypes, Campuses } = require('../../../dist/types/enums');
+const { UserProviders, UserRoleTypes, Campuses, CuisineTypes } = require('../../../dist/types/enums');
 const User = require('../../../dist/database/models/User').default;
 const Restaurant = require('../../../dist/database/models/Restaurant').default;
+const Cuisine = require('../../../dist/database/models/Cuisine').default;
 const RestaurantAddress = require('../../../dist/database/models/RestaurantAddress').default;
 const UserAddress = require('../../../dist/database/models/UserAddress').default;
 const ShortCode = require('../../../dist/database/models/ShortCode').default;
@@ -57,6 +58,10 @@ module.exports = {
       campus: Campuses.IYTE,
       jwtSecureCode: uuid(),
       hashPassword: bcrypt.hashSync('8e8B0pfExQJhM2S', bcrypt.genSaltSync(10)),
+    });
+
+    const cuisine = await Cuisine.create({
+      cuisineType: CuisineTypes.TURKISH,
     });
   },
   down: async (queryInterface) => {

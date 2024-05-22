@@ -99,6 +99,31 @@ export const getRestaurantDetailsResponse = genericJoi.obj({
       isOpen: genericJoi.boolean,
       slug: genericJoi.stringTrimmed,
       campus: genericJoi.stringEnum(Enums.Campuses, 'Campuses'),
+      items: genericJoi.arr(
+        genericJoi.obj({
+          id: genericJoi.num,
+          restaurantId: genericJoi.num,
+          hasDiscount: genericJoi.boolean,
+          discount: genericJoi.num.allow(null),
+          name: genericJoi.stringTrimmed,
+          description: genericJoi.stringTrimmed,
+          imageUrl: genericJoi.stringTrimmed.allow(null),
+          price: genericJoi.num,
+          menu: genericJoi
+            .obj({
+              id: genericJoi.num,
+              hasBadge: genericJoi.boolean,
+              badgeTag: genericJoi.stringTrimmed.allow(null),
+            })
+            .optional(),
+          product: genericJoi
+            .obj({
+              id: genericJoi.num,
+              productType: genericJoi.stringEnum(Enums.ProductTypes, 'ProductTypes'),
+            })
+            .optional(),
+        }),
+      ),
     }),
   }),
 });
@@ -116,6 +141,47 @@ export const getRestaurantsResponse = genericJoi.obj({
         isBusy: genericJoi.boolean,
         hasDelivery: genericJoi.boolean,
         imageUrl: genericJoi.stringTrimmed.allow(null),
+        deliveryPrice: genericJoi.num.allow(null),
+      }),
+    ),
+  }),
+});
+
+export const getRestaurantContentResponse = genericJoi.obj({
+  ...defaultResponse,
+  data: genericJoi.obj({
+    restaurantInfo: genericJoi.obj({
+      id: genericJoi.num,
+      name: genericJoi.stringTrimmed,
+      isOpen: genericJoi.boolean,
+      hasDelivery: genericJoi.boolean,
+      minimumPrice: genericJoi.num,
+      imageUrl: genericJoi.stringTrimmed.allow(null),
+      deliveryPrice: genericJoi.num.allow(null),
+    }),
+    items: genericJoi.arr(
+      genericJoi.obj({
+        id: genericJoi.num,
+        restaurantId: genericJoi.num,
+        hasDiscount: genericJoi.boolean,
+        discount: genericJoi.num.allow(null),
+        name: genericJoi.stringTrimmed,
+        description: genericJoi.stringTrimmed,
+        imageUrl: genericJoi.stringTrimmed.allow(null),
+        price: genericJoi.num,
+        menu: genericJoi
+          .obj({
+            id: genericJoi.num,
+            hasBadge: genericJoi.boolean,
+            badgeTag: genericJoi.stringTrimmed.allow(null),
+          })
+          .optional(),
+        product: genericJoi
+          .obj({
+            id: genericJoi.num,
+            productType: genericJoi.stringEnum(Enums.ProductTypes, 'ProductTypes'),
+          })
+          .optional(),
       }),
     ),
   }),

@@ -49,6 +49,29 @@ export const swRestaurantRouter = {
       },
     },
   },
+  '/api/restaurant/item': {
+    post: {
+      summary: 'Add item to restaurant',
+      tags: ['Restaurant'],
+      security: [{ bearerAuth: [] }],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: j2s(RequestObjects.postRestaurantAddItemBody).swagger,
+          },
+        },
+      },
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 router.get('/', RequireAuth.requireJwt, async (req: Request, res: Response) => {
@@ -96,6 +119,32 @@ router.put(
 
       Helpers.response(res, {
         message: 'Restaurant is updated successfully',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.post(
+  '/item',
+  validate({ body: RequestObjects.postRestaurantAddItemBody }),
+  async (req: Request, res: Response) => {
+    try {
+      const restaurant = req.user as Restaurant;
+      const body = req.body as RequestObjectsTypes.postRestaurantAddItemBody;
+
+      await RestaurantService.addItem({
+        restaurantId: restaurant.id,
+        name: body.name,
+        description: body.description,
+        price: body.price,
+        itemType: body.itemType,
+        imageUrl: body.imageUrl!,
+      });
+
+      Helpers.response(res, {
+        message: '',
       });
     } catch (err) {
       Helpers.error(res, err);

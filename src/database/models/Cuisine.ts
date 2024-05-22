@@ -1,19 +1,11 @@
-import { DataTypes, BelongsToGetAssociationMixin, Association } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 import BaseModel from './BaseModel';
-import Item from './Item';
 import * as Enums from '../../types/enums';
 
 class Cuisine extends BaseModel {
   public id!: number;
-  public cuisineType!: string;
-
-  public readonly item?: Item;
-  public getItem!: BelongsToGetAssociationMixin<Item>;
-
-  public static associations: {
-    item: Association<Cuisine, Item>;
-  };
+  public cuisineType!: Enums.CuisineTypes;
 }
 
 Cuisine.init(

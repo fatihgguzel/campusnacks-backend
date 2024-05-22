@@ -16,7 +16,8 @@
     "db:seed":"sequelize db:seed:all",
     "db:seed:undo":"sequelize db:seed:undo:all",
     "lint": "eslint --fix . && prettier --write .",
-    "mock-restaurants": "ts-node src/database/mock/mockRestaurants.ts"
+    "mock-restaurants": "ts-node src/database/mock/mockRestaurants.ts",
+    "mock-items": "ts-node src/database/mock/mockItems.ts"
 
   },
   "author": "Fatih Güzel",
