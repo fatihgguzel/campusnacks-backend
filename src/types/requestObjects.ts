@@ -25,6 +25,10 @@ export interface getRestaurantsQuery {
   campus?: ENUMS.Campuses;
 }
 
+export interface itemIdParams {
+  itemId: number;
+}
+
 export interface orderIdParams {
   orderId: number;
 }
@@ -93,6 +97,13 @@ export interface putAuthorizeAdminUserParams {
   userId: number;
 }
 
+export interface putEditItemBody {
+  name?: string;
+  description?: string;
+  imageUrl?: string;
+  price?: number;
+}
+
 export interface putUpdateOrderBody {
   orderId: number;
   status: ENUMS.OrderStatusTypes;
@@ -113,4 +124,9 @@ export interface putUpdateRestaurantBody {
   street?: string;
   no?: string;
   isOpen?: boolean;
+}
+
+export interface putUpdateUserbody {
+  phoneNumber?: string;
+  address?: string;
 }

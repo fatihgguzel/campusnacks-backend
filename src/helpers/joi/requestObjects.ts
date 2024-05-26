@@ -133,6 +133,16 @@ export const postRestaurantAddItemBody = genericJoi.obj({
   itemType: genericJoi.stringEnum(Enums.ItemTypes, 'ItemTypes').required(),
 });
 
+export const putEditItemBody = genericJoi
+  .obj({
+    name: genericJoi.stringTrimmed.optional(),
+    description: genericJoi.stringTrimmed.optional(),
+    imageUrl: genericJoi.stringTrimmed.optional().default(null),
+    price: genericJoi.num.optional(),
+  })
+  .required()
+  .label('putEditItemBody');
+
 export const getRestaurantOrdersQuery = genericJoi
   .obj({
     active: genericJoi.boolean.optional().default(false),
@@ -163,9 +173,24 @@ export const putUpdateOrderBody = genericJoi
   .required()
   .label('putUpdateOrderBody');
 
+export const putUpdateUserBody = genericJoi
+  .obj({
+    phoneNumber: genericJoi.stringTrimmed.optional(),
+    address: genericJoi.stringTrimmed.optional(),
+  })
+  .required()
+  .label('putUpdateUserbody');
+
 export const orderIdParams = genericJoi
   .obj({
     orderId: genericJoi.num,
   })
   .required()
   .label('orderIdParams');
+
+export const itemIdParams = genericJoi
+  .obj({
+    itemId: genericJoi.num,
+  })
+  .required()
+  .label('itemIdParams');

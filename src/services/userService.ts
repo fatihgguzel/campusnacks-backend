@@ -6,6 +6,8 @@ import * as Enums from '../types/enums';
 import { v4 as uuid } from 'uuid';
 import sequelize from '../database/sequelize';
 import UserAddress from '../database/models/UserAddress';
+import { AppError } from '../errors/AppError';
+import { Errors } from '../types/Errors';
 
 interface ICreateUserOptions {
   email: string;
@@ -91,4 +93,44 @@ export async function getUserDetails(options: IGetUserDetailsOptions) {
   }
 
   return { user, meta };
+}
+
+interface IUpdateUserOptions {
+  userId: number;
+  phoneNumber?: string;
+  address?: string;
+}
+export async function updateUser(options: IUpdateUserOptions) {
+  const user = await User.findOne({
+    where: {
+      id: options.userId,
+    },
+  });
+
+  if (!user) {
+    throw new AppError(Errors.USER_NOT_FOUND, 404);
+  }
+
+  await sequelize.transaction(async (transaction) => {
+    const userAddress = await UserAddress.findOne({
+      include: [
+        {
+          model: User,
+          as: 'user',
+          where: {
+            id: user.id,
+          },
+        },
+      ],
+      transaction,
+    });
+
+    if (!userAddress) {
+      throw new AppError(Errors.USER_NOT_FOUND, 404);
+    }
+
+    await userAddress.update({ address: options.address }, { transaction });
+
+    await user.update({ phoneNumber: options.phoneNumber }, { transaction });
+  });
 }

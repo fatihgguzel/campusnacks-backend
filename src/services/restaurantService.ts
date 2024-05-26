@@ -620,3 +620,45 @@ export async function getOrderDetails(options: IGetOrderDetailsOptions) {
 
   return order;
 }
+
+interface IEditItemOptions {
+  restaurantId: number;
+  itemId: number;
+  name?: string;
+  description?: string;
+  imageUrl?: string;
+  price?: number;
+}
+export async function editItem(options: IEditItemOptions) {
+  const item = await Item.findOne({
+    where: {
+      id: options.itemId,
+      restaurantId: options.restaurantId,
+    },
+  });
+
+  if (!item) {
+    throw new AppError(Errors.ITEM_NOT_FOUND, 404);
+  }
+
+  await item.update(options);
+}
+
+interface IDeleteItemOptions {
+  restaurantId: number;
+  itemId: number;
+}
+export async function deleteItem(options: IDeleteItemOptions) {
+  const item = await Item.findOne({
+    where: {
+      id: options.itemId,
+      restaurantId: options.restaurantId,
+    },
+  });
+
+  if (!item) {
+    throw new AppError(Errors.ITEM_NOT_FOUND, 404);
+  }
+
+  await item.destroy();
+}

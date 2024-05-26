@@ -72,6 +72,63 @@ export const swRestaurantRouter = {
       },
     },
   },
+  '/api/restaurant/item/{itemId}': {
+    put: {
+      summary: 'edit item',
+      tags: ['Restaurant'],
+      security: [{ bearerAuth: [] }],
+      parameters: [
+        {
+          in: 'path',
+          name: 'itemId',
+          description: 'Id of the item',
+          schema: {
+            type: 'number',
+          },
+        },
+      ],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: j2s(RequestObjects.putEditItemBody).swagger,
+          },
+        },
+      },
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
+            },
+          },
+        },
+      },
+    },
+    delete: {
+      summary: 'Delete item',
+      tags: ['Restaurant'],
+      security: [{ bearerAuth: [] }],
+      parameters: [
+        {
+          in: 'path',
+          name: 'itemId',
+          description: 'Id of the item',
+          schema: {
+            type: 'number',
+          },
+        },
+      ],
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
   '/api/restaurant/orders': {
     get: {
       summary: 'Get restaurants orders',
@@ -298,6 +355,55 @@ router.get(
       Helpers.response(res, {
         message: '',
         data: { order: orderDetails },
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.put(
+  '/item/:itemId',
+  validate({ params: RequestObjects.itemIdParams, body: RequestObjects.putEditItemBody }),
+  async (req: Request, res: Response) => {
+    try {
+      const restaurant = req.user as Restaurant;
+      const params = req.params as unknown as RequestObjectsTypes.itemIdParams;
+      const body = req.body as RequestObjectsTypes.putEditItemBody;
+
+      await RestaurantService.editItem({
+        restaurantId: restaurant.id,
+        itemId: params.itemId,
+        name: body.name,
+        description: body.description,
+        imageUrl: body.imageUrl,
+        price: body.price,
+      });
+
+      Helpers.response(res, {
+        message: '',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.delete(
+  '/item/:itemId',
+  validate({ params: RequestObjects.itemIdParams }),
+  async (req: Request, res: Response) => {
+    try {
+      const restaurant = req.user as Restaurant;
+      const params = req.params as unknown as RequestObjectsTypes.itemIdParams;
+
+      await RestaurantService.deleteItem({
+        restaurantId: restaurant.id,
+        itemId: params.itemId,
+      });
+
+      Helpers.response(res, {
+        message: '',
       });
     } catch (err) {
       Helpers.error(res, err);
