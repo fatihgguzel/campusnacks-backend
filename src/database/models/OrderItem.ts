@@ -8,6 +8,7 @@ class OrderItem extends BaseModel {
   public id!: number;
   public itemId!: number;
   public orderId!: number;
+  public count!: number;
 
   public readonly item?: Item;
   public getItem!: BelongsToGetAssociationMixin<Item>;
@@ -42,6 +43,10 @@ OrderItem.init(
       references: {
         model: Order,
       },
+      allowNull: false,
+    },
+    count: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },

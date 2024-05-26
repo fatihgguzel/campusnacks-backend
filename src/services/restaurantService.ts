@@ -7,10 +7,16 @@ import { toSlug, Logger } from '../helpers';
 import * as Enums from '../types/enums';
 import { uuid } from 'uuidv4';
 import bcrypt from 'bcrypt';
-import { getRestaurantContentResponse } from '../types/responseObjects';
+import { getRestaurantContentResponse, getRestaurantOrdersResponse } from '../types/responseObjects';
 import Product from '../database/models/Product';
 import Item from '../database/models/Item';
 import Menu from '../database/models/Menu';
+import Order from '../database/models/Order';
+import OrderItem from '../database/models/OrderItem';
+import { Op } from 'sequelize';
+import moment from 'moment';
+import User from '../database/models/User';
+import UserAddress from '../database/models/UserAddress';
 
 interface ICreateRestaurantOptions {
   name: string;
@@ -37,7 +43,6 @@ export async function createRestaurant(options: ICreateRestaurantOptions) {
   });
 
   if (existingRestaurant) {
-    console.log(existingRestaurant.slug);
     throw new AppError(Errors.RESTAURANT_EXIST, 400);
   }
 
@@ -199,7 +204,7 @@ export async function getRestaurantDetails(options: IGetRestaurantDetailsOptions
   const items = [];
 
   if (restaurant?.items?.length) {
-    restaurant.items.map((item) => {
+    restaurant.items.forEach((item) => {
       items.push({
         id: item.id,
         restaurantId: item.restaurantId,
@@ -239,6 +244,7 @@ export async function getRestaurants(options: IGetRestaurantsOptions) {
   const { count, rows } = await Restaurant.findAndCountAll({
     where: {
       campus: options.campus,
+      isOpen: true,
     },
     attributes: ['id', 'name', 'hasDelivery', 'imageUrl', 'minimumPrice', 'deliveryTime', 'isBusy'],
     offset: options.offset,
@@ -293,7 +299,7 @@ export async function getRestaurantContent(options: IGetRestaurantContentOptions
   };
 
   if (restaurant.items?.length) {
-    restaurant.items.map((item) => {
+    restaurant.items.forEach((item) => {
       response.items.push({
         id: item.id,
         restaurantId: item.restaurantId,
@@ -386,4 +392,231 @@ export async function addItem(options: IAddItemOptions) {
 
       break;
   }
+}
+
+interface IGetRestaurantOrdersOptions {
+  restaurantId: number;
+  getActiveOrders: boolean;
+  limit: number;
+  offset: number;
+}
+export async function getRestaurantOrders(options: IGetRestaurantOrdersOptions) {
+  const restaurant = await Restaurant.findOne({
+    where: {
+      id: options.restaurantId,
+    },
+  });
+
+  if (!restaurant) {
+    throw new AppError(Errors.RESTAURANT_NOT_FOUND, 404);
+  }
+
+  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+  const { count, rows } = await Order.findAndCountAll({
+    where: {
+      restaurantId: options.restaurantId,
+      ...(options.getActiveOrders
+        ? {
+            orderDate: {
+              [Op.gte]: twentyFourHoursAgo,
+            },
+            [Op.or]: [{ status: Enums.OrderStatusTypes.PENDING }, { status: Enums.OrderStatusTypes.ONDELIVER }],
+          }
+        : {}),
+    },
+    include: [
+      {
+        model: OrderItem,
+        as: 'orderItems',
+        include: [
+          {
+            model: Item,
+            as: 'item',
+          },
+        ],
+      },
+    ],
+    offset: options.offset,
+    limit: options.limit,
+    order: [['createdAt', 'DESC']],
+  });
+
+  const orderIdsToUpdate = rows
+    .filter(
+      (order) =>
+        moment(order.orderDate).isBefore(twentyFourHoursAgo) &&
+        order.status !== Enums.OrderStatusTypes.COMPLETED &&
+        order.status !== Enums.OrderStatusTypes.CANCELLED,
+    )
+    .map((order) => order.id);
+
+  if (orderIdsToUpdate.length) {
+    await Order.update(
+      { status: Enums.OrderStatusTypes.CANCELLED },
+      {
+        where: {
+          id: { [Op.in]: orderIdsToUpdate },
+        },
+      },
+    );
+  }
+
+  const ordersResponse: getRestaurantOrdersResponse['data'] = {
+    orders: [],
+    totalCount: count,
+  };
+
+  rows.forEach((order) => {
+    ordersResponse.orders.push({
+      id: order.id,
+      restaurantId: order.restaurantId,
+      userId: order.userId,
+      // if 24 hours before, update as CANCELLED
+      status:
+        moment(order.orderDate).isBefore(twentyFourHoursAgo) &&
+        order.status !== Enums.OrderStatusTypes.COMPLETED &&
+        order.status !== Enums.OrderStatusTypes.CANCELLED
+          ? Enums.OrderStatusTypes.CANCELLED
+          : order.status,
+      deliveredDate: order.deliveredDate,
+      orderDate: order.orderDate,
+      deliveryType: order.deliveryType,
+      cost: order.orderItems!.reduce((sum, orderItem) => sum + orderItem.item!.price * orderItem.count, 0),
+    });
+  });
+
+  return ordersResponse;
+}
+
+interface ICreateOrderOptions {
+  userId: number;
+  restaurantId: number;
+  items: { itemId: number; count: number }[];
+}
+export async function createOrder(options: ICreateOrderOptions) {
+  const restaurant = await Restaurant.findOne({
+    where: {
+      id: options.restaurantId,
+      isOpen: true,
+    },
+  });
+
+  if (!restaurant) {
+    throw new AppError(Errors.RESTAURANT_NOT_FOUND, 404);
+  }
+
+  const items = await Item.findAll({
+    where: {
+      id: {
+        [Op.in]: options.items.map((item) => {
+          return item.itemId;
+        }),
+      },
+      restaurantId: options.restaurantId,
+    },
+  });
+
+  if (items.length !== options.items.length) {
+    throw new AppError(Errors.ITEM_NOT_FOUND, 404);
+  }
+
+  await sequelize.transaction(async (transaction) => {
+    const order = await Order.create(
+      {
+        userId: options.userId,
+        restaurantId: options.restaurantId,
+        status: Enums.OrderStatusTypes.PENDING,
+        orderDate: moment().toDate(),
+        deliveredDate: null,
+        deliveryType: Enums.DeliveryTypes.DELIVERY,
+      },
+      { transaction },
+    );
+
+    await OrderItem.bulkCreate(
+      options.items.map((item) => {
+        return {
+          itemId: item.itemId,
+          orderId: order.id,
+          count: item.count,
+        };
+      }),
+      { transaction },
+    );
+  });
+}
+
+interface IUpdateOrderOptions {
+  restaurantId: number;
+  orderStatus: Enums.OrderStatusTypes;
+  orderId: number;
+}
+export async function updateOrder(options: IUpdateOrderOptions) {
+  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+  const order = await Order.findOne({
+    where: {
+      id: options.orderId,
+      restaurantId: options.restaurantId,
+      orderDate: { [Op.gte]: twentyFourHoursAgo },
+    },
+  });
+
+  if (!order) {
+    throw new AppError(Errors.ORDER_NOT_FOUND, 404);
+  }
+
+  await order.update({ status: options.orderStatus });
+}
+
+interface IGetOrderDetailsOptions {
+  orderId: number;
+  restaurantId: number;
+}
+export async function getOrderDetails(options: IGetOrderDetailsOptions) {
+  const restaurant = await Restaurant.findOne({
+    where: {
+      id: options.restaurantId,
+    },
+  });
+
+  if (!restaurant) {
+    throw new AppError(Errors.RESTAURANT_NOT_FOUND, 404);
+  }
+
+  const order = await Order.findOne({
+    where: {
+      id: options.orderId,
+    },
+    attributes: ['id'],
+    include: [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['id', 'fullName', 'phoneNumber'],
+        include: [
+          {
+            model: UserAddress,
+            as: 'address',
+            attributes: ['id', 'city', 'district', 'address'],
+          },
+        ],
+      },
+      {
+        model: OrderItem,
+        as: 'orderItems',
+        attributes: ['id', 'count'],
+        include: [
+          {
+            model: Item,
+            as: 'item',
+            attributes: ['id', 'name', 'price'],
+          },
+        ],
+      },
+    ],
+  });
+
+  return order;
 }

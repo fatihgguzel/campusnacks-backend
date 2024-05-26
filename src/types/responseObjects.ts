@@ -7,6 +7,36 @@ export interface defaultResponseSchema {
   code: number;
 }
 
+export interface getOrderDetailsResponse {
+  data: {
+    order?: {
+      id: number;
+      user: {
+        id: number;
+        fullName: string;
+        address: {
+          id: number;
+          city: string;
+          district: string;
+          address: string;
+        };
+        phoneNumber: string;
+      };
+      orderItems: {
+        id: number;
+        count: number;
+        item: {
+          id: number;
+          name: string;
+          price: number;
+        };
+      }[];
+    };
+  };
+  message: string | Errors;
+  code: number;
+}
+
 export interface getRefreshTokenResponse {
   data: {
     authToken: string;
@@ -95,6 +125,24 @@ export interface getRestaurantDetailsResponse {
         };
       }[];
     } | null;
+  };
+  message: string | Errors;
+  code: number;
+}
+
+export interface getRestaurantOrdersResponse {
+  data: {
+    orders: {
+      id: number;
+      userId: number;
+      restaurantId: number;
+      status: ENUMS.OrderStatusTypes;
+      orderDate: Date;
+      deliveredDate: Date | null;
+      deliveryType: ENUMS.DeliveryTypes;
+      cost: number;
+    }[];
+    totalCount: number;
   };
   message: string | Errors;
   code: number;

@@ -71,7 +71,7 @@ app.use('/api/restaurants', restaurantsRoute);
 app.use('/api/user', requireJwt, requireRole(REQUIRE_ROLES.USER), userRoute);
 app.use('/api/admin', requireJwt, requireRole(REQUIRE_ROLES.USER), adminRoute);
 
-app.use('/api/restaurant', requireJwt, requireJwt, requireRole(REQUIRE_ROLES.RESTAURANT), restaurantRoute);
+app.use('/api/restaurant', requireJwt, requireRole(REQUIRE_ROLES.RESTAURANT), restaurantRoute);
 
 app.all('*', (req: Request, res: Response) => {
   response(res, {

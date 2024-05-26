@@ -6,15 +6,19 @@ import User from './User';
 import Restaurant from './Restaurant';
 import Review from './Review';
 import OrderLog from './OrderLog';
+import OrderItem from './OrderItem';
 
 class Order extends BaseModel {
   public id!: number;
   public userId!: number;
   public restaurantId!: number;
-  public status!: string;
+  public status!: Enums.OrderStatusTypes;
   public orderDate!: Date;
   public deliveredDate!: Date | null;
-  public deliveryType!: string;
+  public deliveryType!: Enums.DeliveryTypes;
+
+  public readonly orderItems?: OrderItem[];
+  public getOrderItems!: BelongsToGetAssociationMixin<OrderItem>;
 
   public readonly user?: User;
   public getUser!: BelongsToGetAssociationMixin<User>;
@@ -29,6 +33,7 @@ class Order extends BaseModel {
   public getOrderLog!: BelongsToGetAssociationMixin<Review>;
 
   public static associations: {
+    orderItems: Association<Order, OrderItem>;
     user: Association<Order, User>;
     restaurant: Association<Order, Restaurant>;
     review: Association<Order, Review>;

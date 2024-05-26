@@ -19,6 +19,10 @@ module.exports = {
         references: { model: 'Orders', key: 'id' },
         type: DataTypes.INTEGER,
       },
+      count: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

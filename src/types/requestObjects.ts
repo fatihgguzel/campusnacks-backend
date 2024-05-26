@@ -13,10 +13,28 @@ export interface getRestaurantContentParams {
   restaurantId: number;
 }
 
+export interface getRestaurantOrdersQuery {
+  active?: boolean;
+  offset: number;
+  limit: number;
+}
+
 export interface getRestaurantsQuery {
   offset: number;
   limit: number;
   campus?: ENUMS.Campuses;
+}
+
+export interface orderIdParams {
+  orderId: number;
+}
+
+export interface postCreateOrderBody {
+  restaurantId: number;
+  items: {
+    itemId: number;
+    count: number;
+  }[];
 }
 
 export interface postCreateRestaurantBody {
@@ -73,6 +91,11 @@ export interface putAuthorizeAdminUserBody {
 
 export interface putAuthorizeAdminUserParams {
   userId: number;
+}
+
+export interface putUpdateOrderBody {
+  orderId: number;
+  status: ENUMS.OrderStatusTypes;
 }
 
 export interface putUpdateRestaurantBody {

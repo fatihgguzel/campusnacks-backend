@@ -46,16 +46,14 @@ export enum ProductTypes {
 
 export enum OrderStatusTypes {
   PENDING = '0',
-  CONFIRMED = '1',
-  DELIVERED = '2',
-  CANCELLED = '3',
-  COMPLETED = '4',
+  ONDELIVER = '1',
+  CANCELLED = '2',
+  COMPLETED = '3',
 }
 
 export enum DeliveryTypes {
-  PICKUP = '0',
-  DELIVERY = '1',
-  TAKEOUT = '2',
+  DELIVERY = '0',
+  TAKEOUT = '1',
 }
 
 export enum OptionsTypes {

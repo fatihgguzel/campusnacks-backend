@@ -72,6 +72,92 @@ export const swRestaurantRouter = {
       },
     },
   },
+  '/api/restaurant/orders': {
+    get: {
+      summary: 'Get restaurants orders',
+      tags: ['Restaurant'],
+      security: [{ bearerAuth: [] }],
+      parameters: [
+        {
+          in: 'query',
+          name: 'active',
+          schema: {
+            type: 'boolean',
+          },
+        },
+        {
+          in: 'query',
+          name: 'limit',
+          schema: {
+            type: 'number',
+          },
+        },
+        {
+          in: 'query',
+          name: 'offset',
+          schema: {
+            type: 'number',
+          },
+        },
+      ],
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.getRestaurantOrdersResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+    put: {
+      summary: 'Update order',
+      tags: ['Restaurant'],
+      security: [{ bearerAuth: [] }],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: j2s(RequestObjects.putUpdateOrderBody).swagger,
+          },
+        },
+      },
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.defaultResponseSchema).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
+  '/api/restaurant/orders/{orderId}': {
+    get: {
+      summary: 'Get order details',
+      tags: ['Restaurant'],
+      security: [{ bearerAuth: [] }],
+      parameters: [
+        {
+          in: 'path',
+          name: 'orderId',
+          description: 'Id of the order',
+          schema: {
+            type: 'number',
+          },
+        },
+      ],
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.getOrderDetailsResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 router.get('/', RequireAuth.requireJwt, async (req: Request, res: Response) => {
@@ -145,6 +231,73 @@ router.post(
 
       Helpers.response(res, {
         message: '',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.get(
+  '/orders',
+  validate({ query: RequestObjects.getRestaurantOrdersQuery }),
+  async (req: Request, res: Response) => {
+    try {
+      const restaurant = req.user as Restaurant;
+      const query = req.query as unknown as RequestObjectsTypes.getRestaurantOrdersQuery;
+
+      const ordersResponse = await RestaurantService.getRestaurantOrders({
+        getActiveOrders: query.active!,
+        restaurantId: restaurant.id,
+        limit: query.limit,
+        offset: query.offset,
+      });
+
+      Helpers.response(res, {
+        data: ordersResponse,
+        message: '',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.put('/orders', validate({ body: RequestObjects.putUpdateOrderBody }), async (req: Request, res: Response) => {
+  try {
+    const restaurant = req.user as Restaurant;
+    const body = req.body as RequestObjectsTypes.putUpdateOrderBody;
+
+    await RestaurantService.updateOrder({
+      restaurantId: restaurant.id,
+      orderStatus: body.status,
+      orderId: body.orderId,
+    });
+
+    Helpers.response(res, {
+      message: '',
+    });
+  } catch (err) {
+    Helpers.error(res, err);
+  }
+});
+
+router.get(
+  '/orders/:orderId',
+  validate({ params: RequestObjects.orderIdParams }),
+  async (req: Request, res: Response) => {
+    try {
+      const restaurant = req.user as Restaurant;
+      const params = req.params as unknown as RequestObjectsTypes.orderIdParams;
+
+      const orderDetails = await RestaurantService.getOrderDetails({
+        orderId: params.orderId,
+        restaurantId: restaurant.id,
+      });
+
+      Helpers.response(res, {
+        message: '',
+        data: { order: orderDetails },
       });
     } catch (err) {
       Helpers.error(res, err);
