@@ -70,6 +70,7 @@ export async function createRestaurant(options: ICreateRestaurantOptions) {
         hasDelivery: true,
         minimumPrice: 0,
         deliveryTime: 0,
+        isOpen: true,
         isBusy: false,
         slug: restaurantSlug,
         hashPassword: bcrypt.hashSync(options.password, bcrypt.genSaltSync(10)),
