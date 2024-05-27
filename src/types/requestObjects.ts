@@ -130,3 +130,8 @@ export interface putUpdateUserbody {
   phoneNumber?: string;
   address?: string;
 }
+
+export interface restaurantIdOrderIdParams {
+  restaurantId: number;
+  orderId: number;
+}

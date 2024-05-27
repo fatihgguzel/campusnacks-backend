@@ -206,6 +206,26 @@ export const getRestaurantOrdersResponse = genericJoi.obj({
   }),
 });
 
+export const getUserOrdersResponse = genericJoi.obj({
+  ...defaultResponse,
+  data: genericJoi.obj({
+    orders: genericJoi.arr(
+      genericJoi.obj({
+        id: genericJoi.num,
+        userId: genericJoi.num,
+        restaurantId: genericJoi.num,
+        restaurantName: genericJoi.stringTrimmed,
+        status: genericJoi.stringEnum(Enums.OrderStatusTypes, 'OrderStatusTypes'),
+        orderDate: genericJoi.date,
+        deliveredDate: genericJoi.date.allow(null),
+        deliveryType: genericJoi.stringEnum(Enums.DeliveryTypes, 'DeliveryTypes'),
+        cost: genericJoi.num,
+      }),
+    ),
+    totalCount: genericJoi.num,
+  }),
+});
+
 export const getOrderDetailsResponse = genericJoi.obj({
   ...defaultResponse,
   data: genericJoi.obj({

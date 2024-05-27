@@ -344,12 +344,10 @@ router.get(
   validate({ params: RequestObjects.orderIdParams }),
   async (req: Request, res: Response) => {
     try {
-      const restaurant = req.user as Restaurant;
       const params = req.params as unknown as RequestObjectsTypes.orderIdParams;
 
       const orderDetails = await RestaurantService.getOrderDetails({
         orderId: params.orderId,
-        restaurantId: restaurant.id,
       });
 
       Helpers.response(res, {

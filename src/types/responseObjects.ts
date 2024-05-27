@@ -190,6 +190,25 @@ export interface getUserDetailsResponse {
   code: number;
 }
 
+export interface getUserOrdersResponse {
+  data: {
+    orders: {
+      id: number;
+      userId: number;
+      restaurantId: number;
+      restaurantName: string;
+      status: ENUMS.OrderStatusTypes;
+      orderDate: Date;
+      deliveredDate: Date | null;
+      deliveryType: ENUMS.DeliveryTypes;
+      cost: number;
+    }[];
+    totalCount: number;
+  };
+  message: string | Errors;
+  code: number;
+}
+
 export interface postLoginResponse {
   data: {
     authToken: string;

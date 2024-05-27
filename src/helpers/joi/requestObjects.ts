@@ -188,6 +188,14 @@ export const orderIdParams = genericJoi
   .required()
   .label('orderIdParams');
 
+export const restaurantIdOrderIdParams = genericJoi
+  .obj({
+    restaurantId: genericJoi.num,
+    orderId: genericJoi.num,
+  })
+  .required()
+  .label('restaurantIdOrderIdParams');
+
 export const itemIdParams = genericJoi
   .obj({
     itemId: genericJoi.num,

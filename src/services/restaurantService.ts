@@ -250,6 +250,7 @@ export async function getRestaurants(options: IGetRestaurantsOptions) {
     attributes: ['id', 'name', 'hasDelivery', 'imageUrl', 'minimumPrice', 'deliveryTime', 'isBusy'],
     offset: options.offset,
     limit: options.limit,
+    order: [['createdAt', 'ASC']],
   });
 
   return { totalCount: count, restaurants: rows };
@@ -573,19 +574,8 @@ export async function updateOrder(options: IUpdateOrderOptions) {
 
 interface IGetOrderDetailsOptions {
   orderId: number;
-  restaurantId: number;
 }
 export async function getOrderDetails(options: IGetOrderDetailsOptions) {
-  const restaurant = await Restaurant.findOne({
-    where: {
-      id: options.restaurantId,
-    },
-  });
-
-  if (!restaurant) {
-    throw new AppError(Errors.RESTAURANT_NOT_FOUND, 404);
-  }
-
   const order = await Order.findOne({
     where: {
       id: options.orderId,

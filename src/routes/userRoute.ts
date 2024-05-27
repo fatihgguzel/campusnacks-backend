@@ -73,6 +73,71 @@ export const swUserRouter = {
       },
     },
   },
+  '/api/user/orders': {
+    get: {
+      summary: 'Get user orders',
+      tags: ['User'],
+      security: [{ bearerAuth: [] }],
+      parameters: [
+        {
+          in: 'query',
+          name: 'active',
+          schema: {
+            type: 'boolean',
+          },
+        },
+        {
+          in: 'query',
+          name: 'limit',
+          schema: {
+            type: 'number',
+          },
+        },
+        {
+          in: 'query',
+          name: 'offset',
+          schema: {
+            type: 'number',
+          },
+        },
+      ],
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.getUserOrdersResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
+  '/api/user/orders/{orderId}': {
+    get: {
+      summary: 'Get order details',
+      tags: ['User'],
+      security: [{ bearerAuth: [] }],
+      parameters: [
+        {
+          in: 'path',
+          name: 'orderId',
+          description: 'Id of the order',
+          schema: {
+            type: 'number',
+          },
+        },
+      ],
+      responses: {
+        '200': {
+          content: {
+            'application/json': {
+              schema: j2s(ResponseObjects.getOrderDetailsResponse).swagger,
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 router.get('/', RequireAuth.requireJwt, async (req: Request, res: Response) => {
@@ -120,5 +185,51 @@ router.put('/', validate({ body: RequestObjects.putUpdateUserBody }), async (req
     Helpers.error(res, err);
   }
 });
+
+router.get(
+  '/orders',
+  validate({ query: RequestObjects.getRestaurantOrdersQuery }),
+  async (req: Request, res: Response) => {
+    try {
+      const user = req.user as User;
+      const query = req.query as unknown as RequestObjectsTypes.getRestaurantOrdersQuery;
+
+      const ordersResponse = await UserService.getUserOrders({
+        getActiveOrders: query.active!,
+        userId: user.id,
+        limit: query.limit,
+        offset: query.offset,
+      });
+
+      Helpers.response(res, {
+        data: ordersResponse,
+        message: '',
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
+
+router.get(
+  '/orders/:orderId',
+  validate({ params: RequestObjects.orderIdParams }),
+  async (req: Request, res: Response) => {
+    try {
+      const params = req.params as unknown as RequestObjectsTypes.orderIdParams;
+
+      const orderDetails = await RestaurantService.getOrderDetails({
+        orderId: params.orderId,
+      });
+
+      Helpers.response(res, {
+        message: '',
+        data: { order: orderDetails },
+      });
+    } catch (err) {
+      Helpers.error(res, err);
+    }
+  },
+);
 
 export default router;
