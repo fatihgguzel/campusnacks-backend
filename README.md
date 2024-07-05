@@ -1,5 +1,8 @@
 # campuSnacks Backend
 
+## Introduction
+CampuSnacks is an online food-delivery service for campus areas, focused on local vendors. This repository contains backend codebase.
+
 ## Setup
 - Node version `18.18.2`
 - npm version `9.8.1`
